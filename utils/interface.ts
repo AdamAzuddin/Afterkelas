@@ -18,8 +18,11 @@ export type ChildrenProps = {
 };
 
 export type AdminProps = {
-  username: string;
-  email: string;
+  nationalIdNumber: string;
+  name: string;
+  surname: string;
+  dob: string;
+  studentNumber: string;
 };
 
 export interface AdminPropsWithId extends AdminProps {

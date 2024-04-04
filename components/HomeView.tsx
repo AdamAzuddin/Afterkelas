@@ -2,21 +2,22 @@
 import { setLoader } from "@/redux/features/records/recordSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { formatCurrency } from "@/utils/data";
-import { HeaderProps, StudentProps, TeacherProps } from "@/utils/interface";
+import { AdminProps, HeaderProps, StudentProps, TeacherProps } from "@/utils/interface";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { Loader } from ".";
 
 const HomeView = ({ type }: HeaderProps) => {
   const dispatch = useAppDispatch();
-  const { teacherData, studentData, isSidebarOpen, loading, searchTerm } =
+  const { teacherData, studentData,adminData, isSidebarOpen, loading, searchTerm } =
     useAppSelector((state) => state.record);
-  const [recordData, setRecordData] = useState<TeacherProps[] | StudentProps[]>(
+  const [recordData, setRecordData] = useState<TeacherProps[] | StudentProps[] | AdminProps[]>(
     []
   );
 
   const getFetchData = () => {
     if (type === "teacher") setRecordData(teacherData);
+    else if (type === "admin") setRecordData(adminData);
     else setRecordData(studentData);
 
     setTimeout(() => {
@@ -45,7 +46,7 @@ const HomeView = ({ type }: HeaderProps) => {
       <div
         className={`record__container ${!isSidebarOpen ? "ml-[1em]" : "ml-0"}`}
       >
-        {recordData?.map((val: TeacherProps | StudentProps, i: number) => (
+        {recordData?.map((val: TeacherProps | StudentProps | AdminProps, i: number) => (
           <div
             key={i}
             className="w-full h-auto sm:h-[180px] border-2 border-gray-100 shadow-lg mb-5 p-3"
