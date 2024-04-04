@@ -17,6 +17,15 @@ export type ChildrenProps = {
   children: React.ReactNode;
 };
 
+export type AdminProps = {
+  username: string;
+  email: string;
+};
+
+export interface AdminPropsWithId extends AdminProps {
+  id: number;
+}
+
 export interface HeaderProps {
   type: string;
 }
