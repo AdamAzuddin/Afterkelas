@@ -51,3 +51,15 @@ export const studentData = [
     studentNumber: "G8399",
   },
 ];
+
+export const adminData = [
+  {
+    id: 3,
+    nationalIdNumber: "28393030012222",
+    name: "Mifzal",
+    surname: "Muhammad",
+    dob: "1998-11-21",
+    studentNumber: "G8399",
+  },
+];
+
