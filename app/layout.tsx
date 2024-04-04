@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Teacher-student",
+  title: "Afterkelas",
   description: "A platform designed for both teachers and students",
 };
 
