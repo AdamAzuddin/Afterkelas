@@ -1,4 +1,4 @@
-import { TeacherProps, StudentProps } from "./interface";
+import { TeacherProps, StudentProps, AdminProps } from "./interface";
 
 export const saveTeacherLocalStorage = (data: TeacherProps[]) => {
   if (typeof window !== "undefined") {
@@ -32,4 +32,21 @@ export const getStudentLocalStorage = () => {
     students = JSON.parse(localStorage.getItem("students") || "{}");
   }
   return students;
+};
+
+export const saveAdminLocalStorage = (data: AdminProps[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("admins", JSON.stringify({ data }));
+  }
+};
+
+export const getAdminLocalStorage = () => {
+  let admins = {
+    data: [],
+  };
+
+  if (typeof window !== "undefined") {
+    admins = JSON.parse(localStorage.getItem("admins") || "{}");
+  }
+  return admins;
 };
