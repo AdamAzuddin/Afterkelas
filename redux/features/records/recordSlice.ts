@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IIProps, StudentProps, TeacherProps } from "@/utils/interface";
+import { IIProps, StudentProps, TeacherProps, AdminProps } from "@/utils/interface";
 import {
   saveStudentLocalStorage,
   saveTeacherLocalStorage,
+  saveAdminLocalStorage
 } from "@/utils/getLocalStorage";
 import { uniqueId } from "@/utils/data";
 
@@ -11,6 +12,7 @@ const initialState: IIProps = {
   isSidebarOpen: false,
   teacherData: [] as TeacherProps[],
   studentData: [] as StudentProps[],
+  adminData: [] as AdminProps[],
   searchTerm: "",
 };
 
@@ -39,6 +41,10 @@ export const recordSlice = createSlice({
       state.studentData = action.payload;
     },
 
+    saveAdminData: (state, action) => {
+      state.adminData = action.payload;
+    },
+
     addTeacherData: (state, action) => {
       let value = {
         ...action.payload,
@@ -56,6 +62,15 @@ export const recordSlice = createSlice({
       state.studentData = [...state.studentData, value];
       saveStudentLocalStorage(state.studentData);
     },
+
+    addAdminData: (state, action) => {
+      let value = {
+        ...action.payload,
+        id: uniqueId(),
+      };
+      state.adminData = [...state.adminData, value];
+      saveAdminLocalStorage(state.adminData);
+    },
   },
 });
 
@@ -66,6 +81,8 @@ export const {
   addTeacherData,
   addStudentData,
   saveStudentData,
+  saveAdminData,
+  addAdminData,
   setSearchTerm,
 } = recordSlice.actions;
 
