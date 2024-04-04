@@ -47,5 +47,6 @@ export interface IIProps {
   isSidebarOpen: boolean;
   teacherData: Array<TeacherProps>;
   studentData: Array<StudentProps>;
+  adminData: Array<AdminProps>;
   searchTerm: string;
 }
