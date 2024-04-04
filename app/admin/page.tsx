@@ -1,5 +1,7 @@
+"use client"
+
 // app/admin/page.tsx
-/*import { Header, HomeView, SideLayout } from "@/components";
+import { Header, HomeView, SideLayout } from "@/components";
 import { saveAdminData } from "@/redux/features/records/recordSlice";
 import { useAppDispatch } from "@/redux/hook";
 import { adminData } from "@/utils/data";
@@ -22,7 +24,7 @@ const AdminPage = () => {
         let adminData = value as AdminPropsWithId[];
         dispatch(saveAdminData(adminData));
       } else {
-        let val = adminData as AdminPropsWithId[];
+        let val = adminData as unknown as AdminPropsWithId[];
         saveAdminLocalStorage(val);
         dispatch(saveAdminData(adminData));
       }
@@ -43,4 +45,4 @@ const AdminPage = () => {
   );
 };
 
-export default AdminPage;*/
+export default AdminPage;
