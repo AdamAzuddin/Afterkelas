@@ -12,7 +12,6 @@ import {
 import { AdminPropsWithId } from "@/utils/interface";
 import { useEffect } from "react";
 
-//TODO: Clean up admin page
 const AdminPage = () => {
   const dispatch = useAppDispatch();
 
