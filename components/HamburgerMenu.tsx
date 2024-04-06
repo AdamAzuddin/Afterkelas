@@ -1,17 +1,17 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import MenuIcon from '@mui/icons-material/Menu';
-import { useLocation, Link } from 'react-router-dom';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useLocation, Link } from "react-router-dom";
 
 interface LinkItem {
   text: string;
@@ -28,25 +28,33 @@ const HamburgerMenu: React.FC = () => {
   };
 
   const links: Record<string, LinkItem[]> = {
-    '/': [
-      { text: 'Home', path: '/student' },
-      { text: 'Classes', path: '/student/classes' },
-      { text: 'Assignments', path: '/student/assignments' }
+    "/": [
+      { text: "Home", path: "/student" },
+      { text: "Classes", path: "/student/classes" },
+      { text: "Assignments", path: "/student/assignments" },
     ],
-    '/teacher': [
-      { text: 'Home', path: '/' },
-      { text: 'Classes', path: '/classes' },
-      { text: 'Assignments', path: '/assignments' }
+    "/teacher": [
+      { text: "Home", path: "/" },
+      { text: "Classes", path: "/classes" },
+      { text: "Assignments", path: "/assignments" },
     ],
-    '/admin': [
-      { text: 'Home', path: '/admin' },
-      { text: 'Manage Users', path: '/admin/manage-users' },
-      { text: 'Attendance', path: '/admin/attendance' },
-      { text: 'Analytics', path: '/admin/analytics' }
-    ]
+    "/admin": [
+      { text: "Home", path: "/admin" },
+      { text: "Manage Users", path: "/admin/manage-users" },
+      { text: "Attendance", path: "/admin/attendance" },
+      { text: "Analytics", path: "/admin/analytics" },
+    ],
   };
 
-  const currentLinks: LinkItem[] = links[currentPath] || [];
+  const currentLinks: LinkItem[] = Object.entries(links).reduce(
+    (acc, [key, value]) => {
+      if (currentPath.startsWith(key)) {
+        acc = value;
+      }
+      return acc;
+    },
+    [] as LinkItem[]
+  );
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
@@ -69,7 +77,7 @@ const HamburgerMenu: React.FC = () => {
   return (
     <div>
       <Button onClick={toggleDrawer(true)}>
-        <MenuIcon className=' text-white text-3xl'/>
+        <MenuIcon className=" text-white text-3xl" />
       </Button>
       <Drawer open={open} onClose={toggleDrawer(false)}>
         {DrawerList}
