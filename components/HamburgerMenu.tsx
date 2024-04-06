@@ -62,9 +62,6 @@ const HamburgerMenu: React.FC = () => {
         {currentLinks.map((item, index) => (
           <ListItem key={index} disablePadding>
             <ListItemButton component={Link} to={item.path}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItemButton>
           </ListItem>
