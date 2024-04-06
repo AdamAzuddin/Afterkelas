@@ -29,14 +29,14 @@ const HamburgerMenu: React.FC = () => {
 
   const links: Record<string, LinkItem[]> = {
     '/': [
+      { text: 'Home', path: '/student' },
+      { text: 'Classes', path: '/student/classes' },
+      { text: 'Assignments', path: '/student/assignments' }
+    ],
+    '/teacher': [
       { text: 'Home', path: '/' },
       { text: 'Classes', path: '/classes' },
       { text: 'Assignments', path: '/assignments' }
-    ],
-    '/teacher': [
-      { text: 'Home', path: '/teacher' },
-      { text: 'Classes', path: '/teacher/classes' },
-      { text: 'Assignments', path: '/teacher/assignments' }
     ],
     '/admin': [
       { text: 'Home', path: '/admin' },
