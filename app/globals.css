@@ -78,3 +78,44 @@ a {
 .input-invalid {
   border: 1px solid #e74c3c;
 }
+
+/* tailwind.css or App.css */
+
+.hamburger-menu {
+  transition: all 0.3s ease;
+}
+
+.line {
+  transition: all 0.3s ease;
+}
+
+.rotate-45 {
+  transform: rotate(45deg);
+}
+
+.-rotate-45 {
+  transform: rotate(-45deg);
+}
+
+.opacity-0 {
+  opacity: 0;
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0;
+}
+
+.menu-list li {
+  padding: 5px 10px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+}
+
+.menu-list li:last-child {
+  border-bottom: none;
+}
+
+.menu-list li:hover {
+  background-color: #ddd;
+}
