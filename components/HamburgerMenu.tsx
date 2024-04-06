@@ -56,6 +56,15 @@ const HamburgerMenu: React.FC = () => {
     [] as LinkItem[]
   );
 
+  // Fallback: if currentLinks is empty, set it to default links
+if (currentLinks.length === 0) {
+  currentLinks.push(
+    { text: 'Home', path: '/' },
+    { text: 'Classes', path: '/classes' },
+    { text: 'Assignments', path: '/assignments' }
+  );
+}
+
   const handleLinkClick = () => {
     window.location.reload(); // Refresh the page on link click
   };
