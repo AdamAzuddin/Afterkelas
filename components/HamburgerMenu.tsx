@@ -28,12 +28,12 @@ const HamburgerMenu: React.FC = () => {
   };
 
   const links: Record<string, LinkItem[]> = {
-    "/": [
+    "/student": [
       { text: "Home", path: "/student" },
       { text: "Classes", path: "/student/classes" },
       { text: "Assignments", path: "/student/assignments" },
     ],
-    "/teacher": [
+    "/": [
       { text: "Home", path: "/" },
       { text: "Classes", path: "/classes" },
       { text: "Assignments", path: "/assignments" },
@@ -48,13 +48,14 @@ const HamburgerMenu: React.FC = () => {
 
   const currentLinks: LinkItem[] = Object.entries(links).reduce(
     (acc, [key, value]) => {
-      if (currentPath.startsWith(key)) {
+      if (currentPath === key || currentPath.startsWith(`${key}/`)) {
         acc = value;
       }
       return acc;
     },
     [] as LinkItem[]
   );
+
   const handleLinkClick = () => {
     window.location.reload(); // Refresh the page on link click
   };
