@@ -55,12 +55,15 @@ const HamburgerMenu: React.FC = () => {
     },
     [] as LinkItem[]
   );
+  const handleLinkClick = () => {
+    window.location.reload(); // Refresh the page on link click
+  };
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
         {currentLinks.map((item, index) => (
-          <ListItem key={index} disablePadding>
+          <ListItem key={index} disablePadding onClick={handleLinkClick}>
             <ListItemButton component={Link} to={item.path}>
               <ListItemText primary={item.text} />
             </ListItemButton>
