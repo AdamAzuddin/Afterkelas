@@ -132,10 +132,10 @@ const SignUp = () => {
                 label="Subject"
               >
                 <MenuItem value="">Select subject</MenuItem>
-                <MenuItem value="math">Math</MenuItem>
-                <MenuItem value="bio">Biology</MenuItem>
-                <MenuItem value="chem">Chemistry</MenuItem>
-                <MenuItem value="phy">Physics</MenuItem>
+                <MenuItem value="NeaHIzElfLyho6kwyWim">Math</MenuItem>
+                <MenuItem value="mLPMZ0iqSJVGgaRYEQRW">Biology</MenuItem>
+                <MenuItem value="eoydg38qVigYTy4gkK17">Chemistry</MenuItem>
+                <MenuItem value="RDvg0cfcQcr429p5s9bC">Physics</MenuItem>
               </Select>
             </FormControl>
           )}
