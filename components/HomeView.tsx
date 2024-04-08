@@ -37,6 +37,7 @@ const HomeView = ({ type }: HeaderProps) => {
 
   return (
     <div className={`${!isSidebarOpen ? 'mx-6' : 'mx-1'}`}>
+      {/* Save for admin later
       <div className={`record__container ${!isSidebarOpen ? 'ml-[1em]' : 'ml-0'}`}>
         {recordData?.map((val: TeacherProps | StudentProps | AdminProps, i: number) => (
           <div
@@ -67,25 +68,7 @@ const HomeView = ({ type }: HeaderProps) => {
             </h6>
           </div>
         ))}
-      </div>
-      {/* Styling the container for Card component */}
-      <div className={`${!isSidebarOpen ? 'mx-6' : 'mx-1'}`}>
-        <div className={`record__container ${!isSidebarOpen ? 'ml-[1em]' : 'ml-0'}`}>
-          {/* Conditionally render Card component based on user type */}
-          {type === 'teacher' || type === 'student' ? (
-            <Card subject="Math" path={`${pathPrefix}/classes/math`} color='#FFB6C1 ' />
-          ) : null}
-          {type === 'teacher' || type === 'student' ? (
-            <Card subject="Physics" path={`${pathPrefix}/classes/phy`} color='#87CEEB'/>
-          ) : null}
-          {type === 'teacher' || type === 'student' ? (
-            <Card subject="Chemistry" path={`${pathPrefix}/classes/chem`} color='#90EE90'/>
-          ) : null}
-          {type === 'teacher' || type === 'student' ? (
-            <Card subject="Biology" path={`${pathPrefix}/classes/bio`} color='#FFD700'/>
-          ) : null}
-        </div>
-      </div>
+      </div> */}
     </div>
   );
 };
