@@ -144,7 +144,7 @@ const SignUp = () => {
         </form>
         <Box mt={2} textAlign="center">
           Already signed up?{" "}
-          <Link href="/auth/signin">
+          <Link href="/auth/sign-in">
             <Typography
               color="primary"
               style={{ cursor: "pointer", textDecoration: "underline" }}
