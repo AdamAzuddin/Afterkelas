@@ -1,33 +1,48 @@
-"use client"
+"use client";
+
 // pages/signup.tsx
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { collection, addDoc, doc } from 'firebase/firestore'; // Import the doc method
-import { auth, db } from '../../firebase';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { collection, addDoc, doc } from "firebase/firestore";
+import { auth, db } from "../../firebase";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Link from "next/link";
+import Typography from "@mui/material/Typography";
 
 const SignUp = () => {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [userType, setUserType] = useState('student'); // Default to student
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [userType, setUserType] = useState("student"); // Default to student
   const [subjectId, setSubjectId] = useState<string | null>(null); // Subject document ID
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       // Sign up user with email and password
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
 
       // Proceed to add additional information to Firestore
       await addUserToFirestore(user.uid);
 
-      console.log('User signed up and added to Firestore successfully');
-      router.push('/profile'); // Redirect to profile page after sign up
+      console.log("User signed up and added to Firestore successfully");
+      router.push("/profile"); // Redirect to profile page after sign up
     } catch (error) {
-      console.error('Error signing up:', error);
+      console.error("Error signing up:", error);
     }
   };
 
@@ -35,54 +50,111 @@ const SignUp = () => {
     try {
       let userData: any = {
         name,
-        userType
+        userType,
       };
 
-      if (userType === 'student') {
+      if (userType === "student") {
         userData.assignedTeacher = [];
-      } else if (userType === 'teacher' && subjectId) {
+      } else if (userType === "teacher" && subjectId) {
         userData.subject = doc(db, `subjects/${subjectId}`); // Corrected reference to Firestore document
       }
 
-      await addDoc(collection(db, 'users'), {
+      await addDoc(collection(db, "users"), {
         uid: userId,
-        ...userData
+        ...userData,
       });
     } catch (error) {
-      console.error('Error adding user to Firestore:', error);
+      console.error("Error adding user to Firestore:", error);
       throw error;
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-2xl font-semibold mb-4">Sign Up</h1>
+    <Container maxWidth="sm">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <h1 className="text-4xl">Sign Up</h1>
         <form onSubmit={handleSignUp} className="space-y-4">
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" required className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-          <select value={userType} onChange={(e) => setUserType(e.target.value)} className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-            <option value="student">Student</option>
-            <option value="teacher">Teacher</option>
-            <option value="admin">Admin</option>
-          </select>
-          {userType === 'teacher' && (
-            <div>
-              <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
-              <select id="subject" value={subjectId ?? ''} onChange={(e) => setSubjectId(e.target.value)} className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                <option value="">Select subject</option>
-                <option value="NeaHIzElfLyho6kwyWim">Math</option>
-                <option value="RDvg0cfcQcr429p5s9bC">Physics</option>
-                <option value="eoydg38qVigYTy4gkK17">Chemistry</option>
-                <option value="mLPMZ0iqSJVGgaRYEQRW">Biology</option>
-              </select>
-            </div>
+          <TextField
+            label="Name"
+            variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            type="email"
+            label="Email"
+            variant="outlined"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            type="password"
+            label="Password"
+            variant="outlined"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            fullWidth
+            margin="normal"
+          />
+          <FormControl fullWidth variant="outlined" margin="normal">
+            <InputLabel>User Type</InputLabel>
+            <Select
+              value={userType}
+              onChange={(e) => setUserType(e.target.value as string)}
+              label="User Type"
+            >
+              <MenuItem value="student">Student</MenuItem>
+              <MenuItem value="teacher">Teacher</MenuItem>
+              <MenuItem value="admin">Admin</MenuItem>
+            </Select>
+          </FormControl>
+          {userType === "teacher" && (
+            <FormControl fullWidth variant="outlined" margin="normal">
+              <InputLabel>Subject</InputLabel>
+              <Select
+                value={subjectId ?? ""}
+                onChange={(e) => setSubjectId(e.target.value as string)}
+                label="Subject"
+              >
+                <MenuItem value="">Select subject</MenuItem>
+                <MenuItem value="math">Math</MenuItem>
+                <MenuItem value="bio">Biology</MenuItem>
+                <MenuItem value="chem">Chemistry</MenuItem>
+                <MenuItem value="phy">Physics</MenuItem>
+              </Select>
+            </FormControl>
           )}
-          <button type="submit" className="block w-full bg-blue-500 text-white rounded-md py-2">Sign Up</button>
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Sign Up
+          </Button>
         </form>
-      </div>
-    </div>
+        <Box mt={2} textAlign="center">
+          Already signed up?{" "}
+          <Link href="/auth/signin">
+            <Typography
+              color="primary"
+              style={{ cursor: "pointer", textDecoration: "underline" }}
+            >
+              Sign in
+            </Typography>
+          </Link>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 
