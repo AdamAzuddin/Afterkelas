@@ -6,6 +6,7 @@ import { AdminProps, HeaderProps, StudentProps, TeacherProps } from "@/utils/int
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { Loader } from ".";
+import Card from "./Card";
 
 const HomeView = ({ type }: HeaderProps) => {
   const dispatch = useAppDispatch();
@@ -86,6 +87,7 @@ const HomeView = ({ type }: HeaderProps) => {
           </div>
         ))}
       </div>
+      <Card subject="Math" path="/student/math/"/>
     </div>
   );
 };
