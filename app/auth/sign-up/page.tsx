@@ -51,6 +51,7 @@ const SignUp = () => {
       let userData: any = {
         name,
         userType,
+        email,
       };
 
       if (userType === "student") {
