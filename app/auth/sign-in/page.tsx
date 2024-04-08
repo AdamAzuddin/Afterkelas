@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword,User } from "firebase/auth";
+import { signInWithEmailAndPassword, User } from "firebase/auth";
 import { auth } from "../../firebase";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -10,7 +10,13 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Link from "next/link";
 import { db } from "../../firebase";
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 
 const SignIn = () => {
   const router = useRouter();
@@ -21,37 +27,40 @@ const SignIn = () => {
     e.preventDefault();
     try {
       // Sign in user with email and password
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
-  
+
       // Fetch user data from Firestore based on email
-      //TODO: why no user found?
-      const q = query(collection(db, 'users'), where('email', '==', email));
+      const q = query(collection(db, "users"), where("email", "==", email));
       const userSnapshot = await getDocs(q);
       if (!userSnapshot.empty) {
         // Get the user document data
         const userData = userSnapshot.docs[0].data();
         // Determine the redirect route based on user type from Firestore
-        let redirectRoute = '/'; // Default route
+        let redirectRoute = "/"; // Default route
         const userType = userData.userType; // Assuming userType is a field in the user document
         switch (userType) {
-          case 'student':
-            redirectRoute = '/student';
+          case "student":
+            redirectRoute = "/student";
             break;
-          case 'admin':
-            redirectRoute = '/admin';
+          case "admin":
+            redirectRoute = "/admin";
             break;
           // Teacher will fall through to the default route
           default:
             break;
         }
-        console.log('User signed in successfully');
+        console.log("User signed in successfully");
         router.push(redirectRoute); // Redirect to appropriate route after sign in
       } else {
-        console.error('User data not found in Firestore');
+        console.error("User data not found in Firestore");
       }
     } catch (error) {
-      console.error('Error signing in:', error);
+      console.error("Error signing in:", error);
     }
   };
   return (
