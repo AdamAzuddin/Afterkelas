@@ -76,16 +76,16 @@ const HomeView = ({ type }: HeaderProps) => {
         <div className={`record__container ${!isSidebarOpen ? 'ml-[1em]' : 'ml-0'}`}>
           {/* Conditionally render Card component based on user type */}
           {type === 'teacher' || type === 'student' ? (
-            <Card subject="Math" path={`${pathPrefix}/math`} />
+            <Card subject="Math" path={`${pathPrefix}/math`} color='#FFB6C1 ' />
           ) : null}
           {type === 'teacher' || type === 'student' ? (
-            <Card subject="Physics" path={`${pathPrefix}/physics`} />
+            <Card subject="Physics" path={`${pathPrefix}/physics`} color='#87CEEB'/>
           ) : null}
           {type === 'teacher' || type === 'student' ? (
-            <Card subject="Chemistry" path={`${pathPrefix}/chemistry`} />
+            <Card subject="Chemistry" path={`${pathPrefix}/chemistry`} color='#90EE90'/>
           ) : null}
           {type === 'teacher' || type === 'student' ? (
-            <Card subject="Biology" path={`${pathPrefix}/biology`} />
+            <Card subject="Biology" path={`${pathPrefix}/biology`} color='#FFD700'/>
           ) : null}
         </div>
       </div>

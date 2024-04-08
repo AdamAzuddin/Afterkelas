@@ -2,53 +2,43 @@ import React from 'react';
 import Link from 'next/link';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  >
-    •
-  </Box>
-);
+interface OutlinedCardProps {
+  subject: string;
+  path: string;
+  color: string;
+}
 
-const OutlinedCard = ({ subject, path }: { subject: string; path: string }) => {
-  const cardContent = (
-    <CardContent>
-      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-        Subject
-      </Typography>
-      <Typography variant="h5" component="div">
-        {subject}
-      </Typography>
-      <Typography sx={{ mb: 1.5 }} color="text.secondary">
-        Description
-      </Typography>
-      <Typography variant="body2">
-        Brief description of the subject.
-      </Typography>
-    </CardContent>
-  );
-
+const OutlinedCard = ({ subject, path, color }: OutlinedCardProps) => {
   return (
     <Box>
-      <Card variant="outlined">
+      <Card
+        variant="outlined"
+        sx={{
+          width: '20vw', // Adjust the width for square shape
+          height: '20vw', // Adjust the height for square shape
+          backgroundColor: color,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}
+      >
         {path ? (
           <Link href={path} passHref>
             <Button component="a" style={{ textDecoration: 'none', color: 'inherit' }}>
-              {cardContent}
+              <Typography variant="h5" component="div">
+                {subject}
+              </Typography>
             </Button>
           </Link>
         ) : (
-          cardContent
+          <Typography variant="h5" component="div">
+            {subject}
+          </Typography>
         )}
-        <CardActions>
-          <Button size="small">Learn More</Button>
-        </CardActions>
       </Card>
     </Box>
   );
