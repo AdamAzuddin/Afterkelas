@@ -1,14 +1,12 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { setLoader } from '@/redux/features/records/recordSlice';
-import { useAppDispatch, useAppSelector } from '@/redux/hook';
+import { useAppSelector } from '@/redux/hook';
 import { formatCurrency } from '@/utils/data';
 import { HeaderProps, StudentProps, TeacherProps, AdminProps } from '@/utils/interface';
 import Card  from './Card'; // Assuming Card component is imported correctly
 
 const HomeView = ({ type }: HeaderProps) => {
-  const dispatch = useAppDispatch();
   const { teacherData, studentData, adminData, isSidebarOpen, searchTerm } =
     useAppSelector((state) => state.record);
   const [recordData, setRecordData] = useState<TeacherProps[] | StudentProps[] | AdminProps[]>([]);
@@ -18,7 +16,6 @@ const HomeView = ({ type }: HeaderProps) => {
     else if (type === 'admin') setRecordData(adminData);
     else setRecordData(studentData);
 
-    // Dispatching the loader setting is removed
   };
 
   useEffect(() => {
@@ -76,16 +73,16 @@ const HomeView = ({ type }: HeaderProps) => {
         <div className={`record__container ${!isSidebarOpen ? 'ml-[1em]' : 'ml-0'}`}>
           {/* Conditionally render Card component based on user type */}
           {type === 'teacher' || type === 'student' ? (
-            <Card subject="Math" path={`${pathPrefix}/math`} color='#FFB6C1 ' />
+            <Card subject="Math" path={`${pathPrefix}/classes/math`} color='#FFB6C1 ' />
           ) : null}
           {type === 'teacher' || type === 'student' ? (
-            <Card subject="Physics" path={`${pathPrefix}/physics`} color='#87CEEB'/>
+            <Card subject="Physics" path={`${pathPrefix}/classes/phy`} color='#87CEEB'/>
           ) : null}
           {type === 'teacher' || type === 'student' ? (
-            <Card subject="Chemistry" path={`${pathPrefix}/chemistry`} color='#90EE90'/>
+            <Card subject="Chemistry" path={`${pathPrefix}/classes/chem`} color='#90EE90'/>
           ) : null}
           {type === 'teacher' || type === 'student' ? (
-            <Card subject="Biology" path={`${pathPrefix}/biology`} color='#FFD700'/>
+            <Card subject="Biology" path={`${pathPrefix}/classes/bio`} color='#FFD700'/>
           ) : null}
         </div>
       </div>
