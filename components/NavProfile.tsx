@@ -3,6 +3,7 @@ import arrowDownSvg from "@/assets/arrowDownWhite.svg";
 import messengerSvg from "@/assets/messenger.svg";
 import notificationSvg from "@/assets/notification.svg";
 import userSvg from "@/assets/userIcon.svg";
+import Link from "next/link";
 import Image from "next/image";
 
 const NavProfile = () => {
@@ -36,18 +37,14 @@ const NavProfile = () => {
         />
       </div>
       <div className="flex justify-start items-center mx-3">
-        <Image
-          priority
-          src={userSvg}
-          alt="profile-image"
-          className="w-[25px] h-[25px] rounded-full"
-        />
-        <Image
-          priority
-          src={arrowDownSvg}
-          alt="arrow-down"
-          className="w-[16px] h-[16px] text-white mx-2"
-        />
+        <Link href="/profile">
+            <Image
+              priority
+              src={userSvg}
+              alt="profile-image"
+              className="w-[25px] h-[25px] rounded-full"
+            />
+        </Link>
       </div>
     </div>
   );
