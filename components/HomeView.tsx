@@ -5,7 +5,7 @@ import { setLoader } from '@/redux/features/records/recordSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { formatCurrency } from '@/utils/data';
 import { HeaderProps, StudentProps, TeacherProps, AdminProps } from '@/utils/interface';
-import Card from "./Card"; // Assuming Card component is imported correctly
+import Card  from './Card'; // Assuming Card component is imported correctly
 
 const HomeView = ({ type }: HeaderProps) => {
   const dispatch = useAppDispatch();
@@ -36,7 +36,7 @@ const HomeView = ({ type }: HeaderProps) => {
   }
 
   // Generate path based on user type
-  const pathPrefix = type === 'student' ? '/student/classes' : '/classes/';
+  const pathPrefix = type === 'student' ? '/student' : '';
 
   return (
     <div className={`${!isSidebarOpen ? 'mx-6' : 'mx-1'}`}>
@@ -71,19 +71,24 @@ const HomeView = ({ type }: HeaderProps) => {
           </div>
         ))}
       </div>
-      {/* Conditionally render Card component based on user type */}
-      {type === 'teacher' || type === 'student' ? (
-        <Card subject="Math" path={`${pathPrefix}/math`} />
-      ) : null}
-      {type === 'teacher' || type === 'student' ? (
-        <Card subject="Physics" path={`${pathPrefix}/phy`} />
-      ) : null}
-      {type === 'teacher' || type === 'student' ? (
-        <Card subject="Chemistry" path={`${pathPrefix}/chem`} />
-      ) : null}
-      {type === 'teacher' || type === 'student' ? (
-        <Card subject="Biology" path={`${pathPrefix}/bio`} />
-      ) : null}
+      {/* Styling the container for Card component */}
+      <div className={`${!isSidebarOpen ? 'mx-6' : 'mx-1'}`}>
+        <div className={`record__container ${!isSidebarOpen ? 'ml-[1em]' : 'ml-0'}`}>
+          {/* Conditionally render Card component based on user type */}
+          {type === 'teacher' || type === 'student' ? (
+            <Card subject="Math" path={`${pathPrefix}/math`} />
+          ) : null}
+          {type === 'teacher' || type === 'student' ? (
+            <Card subject="Physics" path={`${pathPrefix}/physics`} />
+          ) : null}
+          {type === 'teacher' || type === 'student' ? (
+            <Card subject="Chemistry" path={`${pathPrefix}/chemistry`} />
+          ) : null}
+          {type === 'teacher' || type === 'student' ? (
+            <Card subject="Biology" path={`${pathPrefix}/biology`} />
+          ) : null}
+        </div>
+      </div>
     </div>
   );
 };
