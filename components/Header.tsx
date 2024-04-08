@@ -29,6 +29,7 @@ const Header = ({ type }: HeaderProps) => {
           alt="dashboard"
           className="w-[20px] h-[20px]"
         />
+        {/* use to display for admin later
         <Image
           priority
           src={arrowRightSvg}
@@ -41,9 +42,9 @@ const Header = ({ type }: HeaderProps) => {
             : type === "student"
             ? "All Students Record"
             : type}
-        </h3>
+        </h3>  */}
       </div>
-      {type === "teacher" || type === "student" ? (
+      {/* {type === "teacher" || type === "student" ? (
         <div className="flex justify-center ">
           <Link
             href={`/create-form/${type === "teacher" ? "teacher" : "student"}`}
@@ -75,7 +76,7 @@ const Header = ({ type }: HeaderProps) => {
             Go back
           </h3>
         </button>
-      )}
+      )} */}
     </div>
   );
 };
