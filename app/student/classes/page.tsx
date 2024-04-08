@@ -6,22 +6,22 @@ const page = () => {
     <div className="mx-6">
         <Card
           subject="Math"
-          path={`/classes/math`}
+          path={`/student/classes/math`}
           color="#FFB6C1 "
         />
         <Card
           subject="Physics"
-          path={`/classes/phy`}
+          path={`/student/classes/phy`}
           color="#87CEEB"
         />
         <Card
           subject="Chemistry"
-          path={`/classes/chem`}
+          path={`/student/classes/chem`}
           color="#90EE90"
         />
         <Card
           subject="Biology"
-          path={`/classes/bio`}
+          path={`/student/classes/bio`}
           color="#FFD700"
         />
     </div>
