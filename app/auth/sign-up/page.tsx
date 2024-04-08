@@ -9,31 +9,6 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 
-async function addUserToFirestore(userData: any) {
-  try {
-    const docRef = await addDoc(collection(db, "users"), userData);
-    console.log("Document written with ID: ", docRef.id);
-    return docRef.id; // Return the document ID
-  } catch (e) {
-    console.error("Error adding document: ", e);
-    throw e; // Rethrow the error for handling by the caller
-  }
-}
-
-/* // Example usage:
-const userData = {
-  first: "Adam",
-  last: "Lovelace",
-  born: 1815
-};
-
-addUserToFirestore(userData)
-  .then(() => {
-    console.log("User added successfully!");
-  })
-  .catch((error) => {
-    console.error("Error adding user:", error);
-  }); */
 const SignUpPage = () => {
   const [name, setName] = useState("");
   const [userType, setUserType] = useState("student");
