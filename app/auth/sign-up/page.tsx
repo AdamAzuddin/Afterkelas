@@ -4,7 +4,13 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, addDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  doc,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -58,6 +64,12 @@ const SignUp = () => {
         userData.assignedTeacher = [];
       } else if (userType === "teacher" && subjectId) {
         userData.subject = doc(db, `subjects/${subjectId}`); // Corrected reference to Firestore document
+        const newClassroomData = {
+          teacher: doc(db, `users/${userId}`), // Reference to teacher document
+          subject: doc(db, `subjects/${subjectId}`),
+          students: [] // Empty array for students
+        };
+        await addDoc(collection(db, "classrooms"), newClassroomData);
 
         // Append the user's userId to the assignedTeachers array of the subject
         const subjectRef = doc(db, `subjects/${subjectId}`);
