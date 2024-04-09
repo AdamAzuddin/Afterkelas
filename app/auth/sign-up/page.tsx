@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, addDoc, doc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -58,6 +58,10 @@ const SignUp = () => {
         userData.assignedTeacher = [];
       } else if (userType === "teacher" && subjectId) {
         userData.subject = doc(db, `subjects/${subjectId}`); // Corrected reference to Firestore document
+
+        // Append the user's userId to the assignedTeachers array of the subject
+        const subjectRef = doc(db, `subjects/${subjectId}`);
+        await updateDoc(subjectRef, { assignedTeachers: arrayUnion(userId) });
       }
 
       await addDoc(collection(db, "users"), {
@@ -132,10 +136,15 @@ const SignUp = () => {
                 label="Subject"
               >
                 <MenuItem value="">Select subject</MenuItem>
-                <MenuItem value="NeaHIzElfLyho6kwyWim">Math</MenuItem>
-                <MenuItem value="mLPMZ0iqSJVGgaRYEQRW">Biology</MenuItem>
-                <MenuItem value="eoydg38qVigYTy4gkK17">Chemistry</MenuItem>
-                <MenuItem value="RDvg0cfcQcr429p5s9bC">Physics</MenuItem>
+                <MenuItem value="AkYZCIKiVVc2CWrKidDX">Physics</MenuItem>
+                <MenuItem value="r8n0N1wE9o1zKsBojNVE">Chemistry</MenuItem>
+                <MenuItem value="XuLhdzRtGzNd5GQydc5z">Biology</MenuItem>
+                <MenuItem value="iyxmaBslS0cd8C4qkRRb">Mathematics</MenuItem>
+                <MenuItem value="f8DeDuyO6VCQ430u8nKb">
+                  Additional Mathematics
+                </MenuItem>
+                <MenuItem value="X8Sq4I8CQA8B8R8CUXpb">Accounting</MenuItem>
+                <MenuItem value="8hk1zhPmzqn8CIkkyVh2">Economics</MenuItem>
               </Select>
             </FormControl>
           )}
