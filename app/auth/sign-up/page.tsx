@@ -148,15 +148,15 @@ const SignUp = () => {
                 label="Subject"
               >
                 <MenuItem value="">Select subject</MenuItem>
-                <MenuItem value="AkYZCIKiVVc2CWrKidDX">Physics</MenuItem>
-                <MenuItem value="r8n0N1wE9o1zKsBojNVE">Chemistry</MenuItem>
-                <MenuItem value="XuLhdzRtGzNd5GQydc5z">Biology</MenuItem>
-                <MenuItem value="iyxmaBslS0cd8C4qkRRb">Mathematics</MenuItem>
-                <MenuItem value="f8DeDuyO6VCQ430u8nKb">
+                <MenuItem value="NDCF4f4hEvGX5VtjBzC1">Physics</MenuItem>
+                <MenuItem value="qqrbQeX4orX9U1DhLj5B">Chemistry</MenuItem>
+                <MenuItem value="TNc5OGszjM1cdzaHysqU">Biology</MenuItem>
+                <MenuItem value="JkzkikzO2aOGj7fd9wDx">Mathematics</MenuItem>
+                <MenuItem value="d9r6S8iuIHALb92Awnr6">
                   Additional Mathematics
                 </MenuItem>
-                <MenuItem value="X8Sq4I8CQA8B8R8CUXpb">Accounting</MenuItem>
-                <MenuItem value="8hk1zhPmzqn8CIkkyVh2">Economics</MenuItem>
+                <MenuItem value="ThTULvhwyMVZTCRG3koz">Accounting</MenuItem>
+                <MenuItem value="v6NsTeqVrupKWa1ccOtD">Economics</MenuItem>
               </Select>
             </FormControl>
           )}
