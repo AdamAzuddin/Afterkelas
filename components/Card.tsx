@@ -2,8 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 interface OutlinedCardProps {
@@ -18,6 +16,7 @@ const OutlinedCard = ({ subject, path, color }: OutlinedCardProps) => {
       <Box component="a" style={{ textDecoration: 'none', color: 'inherit' }}>
         <Card
           variant="outlined"
+          className='m-4'
           sx={{
             width: '20vw', // 20% of viewport width
             height: '20vw', // 20% of viewport width

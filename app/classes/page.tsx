@@ -3,7 +3,7 @@ import Card from "../../components/Card"
 
 const page = () => {
   return (
-    <div className="mx-6">
+    <div className="flex mx-6 px-5">
         <Card
           subject="Math"
           path={`/classes/math`}
