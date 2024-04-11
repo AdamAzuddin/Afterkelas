@@ -6,11 +6,13 @@ import Typography from '@mui/material/Typography';
 
 interface OutlinedCardProps {
   subject: string;
-  path: string;
   color: string;
 }
 
-const OutlinedCard = ({ subject, path, color }: OutlinedCardProps) => {
+const OutlinedCard = ({ subject, color }: OutlinedCardProps) => {
+  // Construct the dynamic route path based on the subject
+  const path = `/classes/${encodeURIComponent(subject.toLowerCase())}`;
+
   return (
     <Link href={path} passHref>
       <Box component="a" style={{ textDecoration: 'none', color: 'inherit' }}>
