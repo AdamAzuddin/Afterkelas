@@ -18,16 +18,13 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../app/firebase"; // Adjust the path as per your project structure
+import { UserDetails } from "@/utils/interface";
 
 interface LinkItem {
   text: string;
   path: string;
 }
 
-interface UserDetails {
-  uid: string;
-  userType: string;
-}
 
 const HamburgerMenu: React.FC = () => {
   const [open, setOpen] = React.useState(false);
@@ -41,8 +38,6 @@ const HamburgerMenu: React.FC = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user: User | null) => {
       setUser(user);
       if (user) {
-        // User is signed in, fetch the userType from Firestore
-        console.log(user.uid);
         try {
           if (!db) {
             console.error("Firebase is not initialized.");
@@ -58,7 +53,6 @@ const HamburgerMenu: React.FC = () => {
             // Assuming there's only one document with the given uid
             const userData = querySnapshot.docs[0].data() as UserDetails; // Cast to UserDetails
             setUserType(userData.userType);
-            console.log("User type:", userData.userType);
           } else {
             console.log("No user document found with the provided uid.");
           }
