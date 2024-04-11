@@ -12,6 +12,8 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore"; // Corrected imports
+import { Grid } from "@mui/material"; // Import Grid from Material-UI
+import TeacherCard from "../../../components/TeacherCard"; // Import the custom TeacherCard component
 
 interface User {
   name: string;
@@ -71,15 +73,16 @@ const Page = () => {
   }, [subject]);
 
   return (
-    <div>
-      <h1>{subject}</h1>
-      <h2>Assigned Teachers:</h2>
-      <ul>
-        {teachers.map((teacher, index) => (
-          <li key={index}>{teacher}</li>
-        ))}
-      </ul>
-    </div>
+    <Grid container spacing={3} justifyContent="center">
+      {teachers.map((teacher, index) => (
+        <Grid item key={index}>
+          <TeacherCard
+            name={teacher}
+            onClick={() => console.log(`Clicked on ${teacher}`)}
+          />
+        </Grid>
+      ))}
+    </Grid>
   );
 };
 
