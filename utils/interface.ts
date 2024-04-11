@@ -53,3 +53,8 @@ export interface IIProps {
   adminData: Array<AdminProps>;
   searchTerm: string;
 }
+
+export interface UserDetails {
+  uid: string;
+  userType: string;
+}
