@@ -43,17 +43,6 @@ const SignIn = () => {
         // Determine the redirect route based on user type from Firestore
         let redirectRoute = "/"; // Default route
         const userType = userData.userType; // Assuming userType is a field in the user document
-        switch (userType) {
-          case "student":
-            redirectRoute = "/student";
-            break;
-          case "admin":
-            redirectRoute = "/admin";
-            break;
-          // Teacher will fall through to the default route
-          default:
-            break;
-        }
         console.log("User signed in successfully");
         router.push(redirectRoute); // Redirect to appropriate route after sign in
       } else {
