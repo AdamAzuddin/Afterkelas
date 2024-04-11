@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
@@ -16,7 +16,6 @@ import {
   query,
   collection,
   where,
-  getFirestore,
 } from "firebase/firestore";
 import { db } from "../app/firebase"; // Adjust the path as per your project structure
 
@@ -35,11 +34,9 @@ const HamburgerMenu: React.FC = () => {
   const [user, setUser] = React.useState<User | null>(null);
   const [userType, setUserType] = React.useState<string | null>(null);
   const location = useLocation();
-  const currentPath = location.pathname;
 
   useEffect(() => {
     const auth = getAuth();
-    const firestore = getFirestore(); // Get the Firestore instance
 
     const unsubscribe = onAuthStateChanged(auth, async (user: User | null) => {
       setUser(user);
