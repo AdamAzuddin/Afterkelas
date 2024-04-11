@@ -30,9 +30,17 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [userType, setUserType] = useState("student"); // Default to student
   const [subjectId, setSubjectId] = useState<string | null>(null); // Subject document ID
+  const [passwordError, setPasswordError] = useState(""); // State to hold password error message
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Check password length
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long.");
+      return; // Exit the function early if password is too short
+    }
+
     try {
       // Sign up user with email and password
       const userCredential = await createUserWithEmailAndPassword(
@@ -122,10 +130,15 @@ const SignUp = () => {
             label="Password"
             variant="outlined"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setPasswordError(""); // Clear password error message when user types in the password field
+            }}
             required
             fullWidth
             margin="normal"
+            error={passwordError !== ""}
+            helperText={passwordError}
           />
           <FormControl fullWidth variant="outlined" margin="normal">
             <InputLabel>User Type</InputLabel>
