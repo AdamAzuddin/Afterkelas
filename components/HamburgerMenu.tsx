@@ -1,4 +1,5 @@
-import * as React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
@@ -6,74 +7,115 @@ import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useLocation, Link } from "react-router-dom";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import {
+  getDocs,
+  query,
+  collection,
+  where,
+  getFirestore,
+} from "firebase/firestore";
+import { db } from "../app/firebase"; // Adjust the path as per your project structure
 
 interface LinkItem {
   text: string;
   path: string;
 }
 
+interface UserDetails {
+  uid: string;
+  userType: string;
+}
+
 const HamburgerMenu: React.FC = () => {
   const [open, setOpen] = React.useState(false);
+  const [user, setUser] = React.useState<User | null>(null);
+  const [userType, setUserType] = React.useState<string | null>(null);
   const location = useLocation();
   const currentPath = location.pathname;
 
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
-  };
+  useEffect(() => {
+    const auth = getAuth();
+    const firestore = getFirestore(); // Get the Firestore instance
 
-  const links: Record<string, LinkItem[]> = {
-    "/student": [
-      { text: "Home", path: "/student" },
-      { text: "Classes", path: "/student/classes" },
-      { text: "Assignments", path: "/student/assignments" },
-    ],
-    "/": [
-      { text: "Home", path: "/" },
-      { text: "Classes", path: "/classes" },
-      { text: "Assignments", path: "/assignments" },
-    ],
-    "/admin": [
-      { text: "Home", path: "/admin" },
-      { text: "Manage Users", path: "/admin/manage-users" },
-      { text: "Attendance", path: "/admin/attendance" },
-      { text: "Analytics", path: "/admin/analytics" },
-    ],
-  };
+    const unsubscribe = onAuthStateChanged(auth, async (user: User | null) => {
+      setUser(user);
+      if (user) {
+        // User is signed in, fetch the userType from Firestore
+        console.log(user.uid);
+        try {
+          if (!db) {
+            console.error("Firebase is not initialized.");
+            return;
+          }
 
-  const currentLinks: LinkItem[] = Object.entries(links).reduce(
-    (acc, [key, value]) => {
-      if (currentPath === key || currentPath.startsWith(`${key}/`)) {
-        acc = value;
+          const usersRef = collection(db, "users");
+          const querySnapshot = await getDocs(
+            query(usersRef, where("uid", "==", user.uid))
+          );
+
+          if (!querySnapshot.empty) {
+            // Assuming there's only one document with the given uid
+            const userData = querySnapshot.docs[0].data() as UserDetails; // Cast to UserDetails
+            setUserType(userData.userType);
+            console.log("User type:", userData.userType);
+          } else {
+            console.log("No user document found with the provided uid.");
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      } else {
+        setUserType(null); // Reset userType if no user is signed in
       }
-      return acc;
-    },
-    [] as LinkItem[]
-  );
+    });
 
-  // Fallback: if currentLinks is empty, set it to default links
-if (currentLinks.length === 0) {
-  currentLinks.push(
-    { text: 'Home', path: '/' },
-    { text: 'Classes', path: '/classes' },
-    { text: 'Assignments', path: '/assignments' }
-  );
-}
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
-  const handleLinkClick = () => {
-    window.location.reload(); // Refresh the page on link click
-  };
+  const links: Record<string, LinkItem[]> = userType
+    ? {
+        student: [
+          { text: "Home", path: "/" },
+          { text: "Classes", path: "/classes" },
+          { text: "Assignments", path: "/assignments" },
+        ],
+        teacher: [
+          { text: "Home", path: "/" },
+          { text: "My class", path: "/my-class" },
+          { text: "Assignments", path: "/assignments" },
+        ],
+        admin: [
+          { text: "Home", path: "/admin" },
+          { text: "Manage Users", path: "/admin/manage-users" },
+          { text: "Attendance", path: "/admin/attendance" },
+          { text: "Analytics", path: "/admin/analytics" },
+        ],
+      }
+    : {
+        default: [
+          { text: "Home", path: "/" },
+          { text: "Classes", path: "/classes" },
+          { text: "Assignments", path: "/assignments" },
+        ],
+      };
+
+  const currentUserLinks = userType ? links[userType] ?? [] : [];
 
   const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+    <Box sx={{ width: 250 }} role="presentation" onClick={() => setOpen(false)}>
       <List>
-        {currentLinks.map((item, index) => (
-          <ListItem key={index} disablePadding onClick={handleLinkClick}>
+        {currentUserLinks.map((item, index) => (
+          <ListItem
+            key={index}
+            disablePadding
+            onClick={() => handleLinkClick(item.path)}
+          >
             <ListItemButton component={Link} to={item.path}>
               <ListItemText primary={item.text} />
             </ListItemButton>
@@ -84,12 +126,16 @@ if (currentLinks.length === 0) {
     </Box>
   );
 
+  const handleLinkClick = (path: string) => {
+    window.location.reload(); // Refresh the page on link click
+  };
+
   return (
     <div>
-      <Button onClick={toggleDrawer(true)}>
+      <Button onClick={() => setOpen(true)}>
         <MenuIcon className=" text-white text-3xl" />
       </Button>
-      <Drawer open={open} onClose={toggleDrawer(false)}>
+      <Drawer open={open} onClose={() => setOpen(false)}>
         {DrawerList}
       </Drawer>
     </div>
