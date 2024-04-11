@@ -1,36 +1,14 @@
-"use client"
-import React, { useEffect, useState } from 'react';
-import { useAppSelector } from '@/redux/hook';
-import { HeaderProps, StudentProps, TeacherProps, AdminProps } from '@/utils/interface';
+"use client";
+import React from "react";
+import {
+  HeaderProps,
+} from "@/utils/interface";
 
-const HomeView = ({ type }: HeaderProps) => {
-  const { teacherData, studentData, adminData, isSidebarOpen, searchTerm } =
-    useAppSelector((state) => state.record);
-  const [recordData, setRecordData] = useState<TeacherProps[] | StudentProps[] | AdminProps[]>([]);
+const HomeView = ({ userType }: HeaderProps) => {
 
-  const getFetchData = () => {
-    if (type === 'teacher') setRecordData(teacherData);
-    else if (type === 'admin') setRecordData(adminData);
-    else setRecordData(studentData);
-
-  };
-
-  useEffect(() => {
-    getFetchData();
-  }, [type, teacherData, studentData]); // Removed loading dependency
-
-  if (recordData.length === 0 && searchTerm) {
-    return (
-      <div className="flex justify-center items-center text-center text-lg text-gray-700">
-        <p className="capitalize">
-          No <span className="font-bold">{type}</span> records found.
-        </p>
-      </div>
-    );
-  }
-
+  
   return (
-    <div className={`${!isSidebarOpen ? 'mx-6' : 'mx-1'}`}>
+    <div>
       {/* Save for admin later
       <div className={`record__container ${!isSidebarOpen ? 'ml-[1em]' : 'ml-0'}`}>
         {recordData?.map((val: TeacherProps | StudentProps | AdminProps, i: number) => (
@@ -63,6 +41,7 @@ const HomeView = ({ type }: HeaderProps) => {
           </div>
         ))}
       </div> */}
+      {userType}
     </div>
   );
 };

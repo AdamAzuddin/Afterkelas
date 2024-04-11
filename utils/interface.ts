@@ -30,7 +30,7 @@ export interface AdminPropsWithId extends AdminProps {
 }
 
 export interface HeaderProps {
-  type: string;
+  userType: string | null;
 }
 
 export type StudentProps = {
