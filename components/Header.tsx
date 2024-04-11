@@ -1,16 +1,10 @@
 "use client";
-import Link from "next/link";
 import dashboardSvg from "@/assets/dashboard.svg";
-import arrowRightSvg from "@/assets/arrowRight.svg";
 import { HeaderProps } from "@/utils/interface";
 import Image from "next/image";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { useRouter } from "next/navigation";
-import { setLoader } from "@/redux/features/records/recordSlice";
+import {  useAppSelector } from "@/redux/hook";
 
-const Header = ({ type }: HeaderProps) => {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
+const Header = () => {
   const { isSidebarOpen } = useAppSelector((state) => state.record);
   return (
     <div

@@ -1,10 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import moment from 'moment';
 import { useAppSelector } from '@/redux/hook';
-import { formatCurrency } from '@/utils/data';
 import { HeaderProps, StudentProps, TeacherProps, AdminProps } from '@/utils/interface';
-import Card  from './Card'; // Assuming Card component is imported correctly
 
 const HomeView = ({ type }: HeaderProps) => {
   const { teacherData, studentData, adminData, isSidebarOpen, searchTerm } =
@@ -31,9 +28,6 @@ const HomeView = ({ type }: HeaderProps) => {
       </div>
     );
   }
-
-  // Generate path based on user type
-  const pathPrefix = type === 'student' ? '/student' : '';
 
   return (
     <div className={`${!isSidebarOpen ? 'mx-6' : 'mx-1'}`}>

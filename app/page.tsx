@@ -39,7 +39,7 @@ const Home = () => {
   }, []);
   return (
     <SideLayout>
-      <Header type="teacher" />
+      <Header/>
       <HomeView type="teacher" />
     </SideLayout>
   );
