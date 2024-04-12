@@ -22,7 +22,7 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
 
   useEffect(() => {
     if (userType === "student") {
-      fetchEnrolledClassrooms(uid).then((enrolledClassrooms) => {
+      fetchEnrolledClassrooms(uid!).then((enrolledClassrooms) => {
         setTeachersName(
           enrolledClassrooms.map(({ teacherName }) => teacherName)
         );
