@@ -31,7 +31,7 @@ export interface AdminPropsWithId extends AdminProps {
 
 export interface HeaderProps {
   userType: string | null;
-  uid: string | undefined;
+  uid: string ;
 }
 
 export type StudentProps = {

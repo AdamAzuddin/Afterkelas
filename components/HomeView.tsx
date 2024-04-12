@@ -9,65 +9,19 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
-import { db } from "../app/firebase"; // Assuming you have a Firebase db instance
-import { getDocs, query, collection, where, getDoc } from "firebase/firestore";
-import { UserDetails } from "@/utils/interface";
+import { fetchEnrolledClassrooms } from "../utils/classroomHelpers";
 
 const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
-  // Logic to fetch enrolled classrooms, upcoming tutoring sessions, and upcoming assignments goes here
   const upcomingTutoringSessions: string[] = []; // Replace with actual logic to fetch upcoming tutoring sessions
   const upcomingAssignments: string[] = []; // Replace with actual logic to fetch upcoming assignments
   const [enrolledClassrooms, setEnrolledClassrooms] = useState<string[]>([]);
   const [teachersName, setTeachersName] = useState<string[]>([]);
 
   useEffect(() => {
-    const fetchEnrolledClassrooms = async () => {
-      try {
-        if (!db) {
-          console.error("Firebase is not initialized.");
-          return;
-        }
-
-        const classroomsRef = collection(db, "classrooms");
-        const querySnapshot = await getDocs(
-          query(classroomsRef, where("students", "array-contains", uid))
-        );
-
-        const classrooms: string[] = [];
-        const namesPromises: Promise<string>[] = [];
-
-        querySnapshot.forEach((doc) => {
-          const classroomId = doc.id;
-          classrooms.push(classroomId);
-
-          const teacherRef = doc.data().teacher;
-          const teacherUid = teacherRef.id;
-
-          const teacherRefBaseUid = collection(db, "users");
-          const teacherPromise = getDocs(
-            query(teacherRefBaseUid, where("uid", "==", teacherUid))
-          ).then((teacherSnapshot) => {
-            if (!teacherSnapshot.empty) {
-              const teacherData = teacherSnapshot.docs[0].data() as UserDetails;
-              return teacherData.name;
-            } else {
-              console.log("No user document found with the provided uid.");
-              return ""; // Return an empty string if no user found
-            }
-          });
-          namesPromises.push(teacherPromise);
-        });
-
-        const teacherNames = await Promise.all(namesPromises);
-        setEnrolledClassrooms(classrooms);
-        setTeachersName(teacherNames.filter((name) => name !== ""));
-      } catch (error) {
-        console.error("Error fetching enrolled classrooms:", error);
-      }
-    };
-
     if (userType === "student") {
-      fetchEnrolledClassrooms();
+      fetchEnrolledClassrooms(uid).then((teacherNames) => {
+        setTeachersName(teacherNames);
+      });
     }
   }, [uid, userType]);
 
