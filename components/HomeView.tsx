@@ -14,7 +14,6 @@ import { fetchEnrolledClassrooms } from "../utils/classroomHelpers";
 const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
   const upcomingTutoringSessions: string[] = []; // Replace with actual logic to fetch upcoming tutoring sessions
   const upcomingAssignments: string[] = []; // Replace with actual logic to fetch upcoming assignments
-  const [enrolledClassrooms, setEnrolledClassrooms] = useState<string[]>([]);
   const [teachersName, setTeachersName] = useState<string[]>([]);
 
   useEffect(() => {
