@@ -1,49 +1,104 @@
 "use client";
 import React from "react";
+import { HeaderProps } from "@/utils/interface";
+import Link from "next/link";
 import {
-  HeaderProps,
-} from "@/utils/interface";
+  Button,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 
-const HomeView = ({ userType }: HeaderProps) => {
+const HomeView: React.FC<HeaderProps> = ({ userType }) => {
+  if (userType === "student") {
+    // Logic to fetch enrolled classrooms, upcoming tutoring sessions, and upcoming assignments goes here
+    const enrolledClassrooms: string[] = []; // Replace with actual logic to fetch enrolled classrooms
+    const upcomingTutoringSessions: string[] = []; // Replace with actual logic to fetch upcoming tutoring sessions
+    const upcomingAssignments: string[] = []; // Replace with actual logic to fetch upcoming assignments
 
-  
-  return (
-    <div>
-      {/* Save for admin later
-      <div className={`record__container ${!isSidebarOpen ? 'ml-[1em]' : 'ml-0'}`}>
-        {recordData?.map((val: TeacherProps | StudentProps | AdminProps, i: number) => (
-          <div
-            key={i}
-            className="w-full h-auto sm:h-[180px] border-2 border-gray-100 shadow-lg mb-5 p-3"
-          >
-            <h1 className="text-blue-700 font-bold text-md sm:text-lg pb-2 uppercase">
-              {type === 'teacher' && 'title' in val
-                ? `Name: ${val?.title}. ${val?.name} ${val?.surname}`
-                : `Name: ${val?.name} ${val?.surname}`}
-            </h1>
-            <h2 className="text-gray-900 font-normal text-md pb-2">
-              {type === 'teacher' && 'title' in val
-                ? `Teacher Number: ${val?.teacherNumber}`
-                : `Student Number: ${val?.studentNumber}`}
-            </h2>
-            <h2 className="text-gray-900 font-normal text-md pb-2">
-              National ID Number: {val?.nationalIdNumber}
-            </h2>
-            {type === 'teacher' && 'title' in val && (
-              <h2 className="text-gray-900 font-normal text-md pb-2">
-                Salary: ₦{formatCurrency(val?.salary)}
-              </h2>
-            )}
-            <h6 className="text-red-600 text-sm">
-              <span className="text-gray-900">Date of birth: </span>
-              {moment(val?.dob).format('LL')}
-            </h6>
+    return (
+      <div>
+        <Typography variant="h4">Your Classrooms</Typography>
+        {enrolledClassrooms.length > 0 ? (
+          <>
+            <List>
+              {enrolledClassrooms.map((classroom, index) => (
+                <ListItem key={index}>
+                  <ListItemText primary={classroom} />
+                </ListItem>
+              ))}
+            </List>
+          </>
+        ) : (
+          <div>
+            <Typography variant="body1">
+              You're not a part of any classroom. Would you like to join one?
+            </Typography>
+            <Button variant="contained" color="primary">
+              Join a Classroom
+            </Button>
           </div>
-        ))}
-      </div> */}
-      {userType}
-    </div>
-  );
+        )}
+
+        <div style={{ marginTop: "20px" }}>
+          <Typography variant="h4">Upcoming Tutoring Sessions:</Typography>
+          {upcomingTutoringSessions.length > 0 ? (
+            <List>
+              {upcomingTutoringSessions.map((session, index) => (
+                <ListItem key={index}>
+                  <ListItemText primary={session} />
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <div>
+              <Typography variant="body1">
+                There are no upcoming tutoring sessions.
+              </Typography>
+              <Button variant="contained" color="primary">
+                Add Tutoring Session
+              </Button>
+            </div>
+          )}
+        </div>
+
+        <div style={{ marginTop: "20px" }}>
+          <Typography variant="h4">Upcoming Assignments:</Typography>
+          {upcomingAssignments.length > 0 ? (
+            <List>
+              {upcomingAssignments.map((assignment, index) => (
+                <ListItem key={index}>
+                  <ListItemText primary={assignment} />
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <div>
+              <Typography variant="body1">
+                There are no upcoming assignments.
+              </Typography>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  } else if (userType === "teacher" || userType === "admin") {
+    // Leave empty div for teacher and admin
+    return <div></div>;
+  } else {
+    // Display sign-in message with a link to /auth/sign-in
+    return (
+      <div>
+        <Typography variant="body1">Please sign in</Typography>
+        <Link href={"/auth/sign-in"} passHref>
+          <Button variant="contained" color="primary">
+            Sign In
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 };
 
 export default HomeView;
