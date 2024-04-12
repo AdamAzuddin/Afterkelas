@@ -10,6 +10,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { fetchEnrolledClassrooms } from "../utils/classroomHelpers";
+import ClassroomListItem from "./ClassroomListCard";
 
 const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
   const upcomingTutoringSessions: string[] = []; // Replace with actual logic to fetch upcoming tutoring sessions
@@ -41,13 +42,13 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
         <Typography variant="h4">Your Classrooms</Typography>
         {teachersName.length > 0 ? (
           <>
-            <List>
+            <List className="flex mx-5">
               {enrolledClassrooms.map((classroom, index) => (
-                <ListItem key={index}>
-                  <ListItemText
-                    primary={`${classroom.teacherName}'s Class - Classroom UID: ${classroom.classroomUid}`}
-                  />
-                </ListItem>
+                <ClassroomListItem
+                  key={index}
+                  teacherName={classroom.teacherName}
+                  classroomUid={classroom.classroomUid}
+                />
               ))}
             </List>
           </>
