@@ -15,11 +15,17 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
   const upcomingTutoringSessions: string[] = []; // Replace with actual logic to fetch upcoming tutoring sessions
   const upcomingAssignments: string[] = []; // Replace with actual logic to fetch upcoming assignments
   const [teachersName, setTeachersName] = useState<string[]>([]);
+  const [enrolledClassrooms, setEnrolledClassrooms] = useState<
+    { teacherName: string; classroomUid: string }[]
+  >([]);
 
   useEffect(() => {
     if (userType === "student") {
-      fetchEnrolledClassrooms(uid).then((teacherNames) => {
-        setTeachersName(teacherNames);
+      fetchEnrolledClassrooms(uid).then((enrolledClassrooms) => {
+        setTeachersName(
+          enrolledClassrooms.map(({ teacherName }) => teacherName)
+        );
+        setEnrolledClassrooms(enrolledClassrooms);
       });
     }
   }, [uid, userType]);
@@ -36,9 +42,11 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
         {teachersName.length > 0 ? (
           <>
             <List>
-              {teachersName.map((teacherName, index) => (
+              {enrolledClassrooms.map((classroom, index) => (
                 <ListItem key={index}>
-                  <ListItemText primary={`${teacherName}'s Class`} />
+                  <ListItemText
+                    primary={`${classroom.teacherName}'s Class - Classroom UID: ${classroom.classroomUid}`}
+                  />
                 </ListItem>
               ))}
             </List>
