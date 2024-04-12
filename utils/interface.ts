@@ -58,4 +58,5 @@ export interface IIProps {
 export interface UserDetails {
   uid: string;
   userType: string;
+  name: string;
 }
