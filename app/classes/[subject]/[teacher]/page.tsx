@@ -61,81 +61,101 @@ const Page = () => {
   // Function to handle form submission
   const handleSubmit = async (event: any) => {
     event.preventDefault(); // Prevent default form submission behavior
-  
+
     if (selectedDate && selectedTimeSlot) {
       // Parse the selected time slot to extract the start and end times
       const [startTime, endTime] = selectedTimeSlot.split(" - ");
-  
+
       // Get the selected date and time in Malaysia timezone
       const selectedDateTime = selectedDate.hour(
         Number(startTime.split(":")[0]) + 8
       ); // Add 8 hours for Malaysia timezone
       selectedDateTime.minute(Number(startTime.split(":")[1]));
-  
+
       // Format the selected date in ISO 8601 format
       const isoDate = selectedDateTime.format("YYYY-MM-DD");
-  
+
       console.log("Booking submitted:", isoDate);
-  
+
       try {
         const auth = getAuth();
         const user = auth.currentUser;
-  
+
         if (user) {
           const usersRef = collection(db, "users");
-  
+
           // Fetch user document
           const userQuerySnapshot = await getDocs(
             query(usersRef, where("email", "==", user.email))
           );
-  
+
           if (!userQuerySnapshot.empty) {
             const userDoc = userQuerySnapshot.docs[0];
             const userDocData = userDoc.data();
             const userUid = userDocData.uid;
-  
-            // Check if the user already has a booking on the same date
-            if (userDocData.booking?.date === isoDate) {
-              setBookingError("You already have a booking on this date.");
+
+            // Check if the user already has a booking on the same date and time
+            const existingBooking = userDocData.bookings?.find(
+              (booking: any) =>
+                booking.date === isoDate &&
+                booking.timeSlot === selectedTimeSlot
+            );
+
+            if (existingBooking) {
+              setBookingError("You already have a booking for this time slot.");
               return; // Exit function
             }
-  
+
             // Update user document
             await updateDoc(userDoc.ref, {
-              booking: {
-                date: isoDate,
-                timeSlot: selectedTimeSlot,
-                teacherId,
-              },
+              bookings: [
+                ...(userDocData.bookings || []),
+                {
+                  date: isoDate,
+                  timeSlot: selectedTimeSlot,
+                  teacherId,
+                },
+              ],
             });
-  
+
             console.log("User booking updated successfully.");
-  
+
             // Fetch teacher document
             const teacherQuerySnapshot = await getDocs(
               query(usersRef, where("uid", "==", teacherId))
             );
-  
+
             if (!teacherQuerySnapshot.empty) {
               const teacherDoc = teacherQuerySnapshot.docs[0];
               const teacherDocData = teacherDoc.data();
               const teacherUid = teacherDocData.uid;
-  
-              // Check if the teacher already has a booking on the same date
-              if (teacherDocData.booking?.date === isoDate) {
-                setBookingError("Teacher already has a booking on this date.");
+
+              // Check if the teacher already has a booking on the same date and time
+              const teacherExistingBooking = teacherDocData.bookings?.find(
+                (booking: any) =>
+                  booking.date === isoDate &&
+                  booking.timeSlot === selectedTimeSlot
+              );
+
+              if (teacherExistingBooking) {
+                setBookingError(
+                  "Teacher already has a booking for this time slot."
+                );
                 return; // Exit function
               }
-  
+
               // Update teacher document
               await updateDoc(teacherDoc.ref, {
-                booking: {
-                  date: isoDate,
-                  timeSlot: selectedTimeSlot,
-                  studentId: userUid,
-                },
+                bookings: [
+                  ...(teacherDocData.bookings || []),
+                  {
+                    date: isoDate,
+                    timeSlot: selectedTimeSlot,
+                    studentId: userUid,
+                  },
+                ],
               });
-  
+
               console.log("Teacher booking updated successfully.");
             } else {
               console.error("Teacher document not found.");
@@ -153,8 +173,6 @@ const Page = () => {
       console.error("Please select both date and time slot.");
     }
   };
-  
-  
 
   useEffect(() => {
     const auth = getAuth();
