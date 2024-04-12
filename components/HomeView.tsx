@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { HeaderProps } from "@/utils/interface";
 import Link from "next/link";
 import {
@@ -9,14 +9,47 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
+import { db } from "../app/firebase"; // Assuming you have a Firebase db instance
+import { getDocs, query, collection, where } from "firebase/firestore";
 
-const HomeView: React.FC<HeaderProps> = ({ userType }) => {
+const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
+  // Logic to fetch enrolled classrooms, upcoming tutoring sessions, and upcoming assignments goes here
+  const upcomingTutoringSessions: string[] = []; // Replace with actual logic to fetch upcoming tutoring sessions
+  const upcomingAssignments: string[] = []; // Replace with actual logic to fetch upcoming assignments
+  const [enrolledClassrooms, setEnrolledClassrooms] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchEnrolledClassrooms = async () => {
+      try {
+        if (!db) {
+          console.error("Firebase is not initialized.");
+          return;
+        }
+
+        const classroomsRef = collection(db, "classrooms");
+        const querySnapshot = await getDocs(
+          query(classroomsRef, where("students", "array-contains", uid))
+        );
+
+        const classrooms: string[] = [];
+        querySnapshot.forEach((doc) => {
+          classrooms.push(doc.id); // Assuming the document ID is the name of the classroom
+        });
+
+        setEnrolledClassrooms(classrooms);
+      } catch (error) {
+        console.error("Error fetching enrolled classrooms:", error);
+      }
+    };
+
+    if (userType === "student") {
+      fetchEnrolledClassrooms();
+    }
+  }, [uid, userType]);
+
+  console.log();
+
   if (userType === "student") {
-    // Logic to fetch enrolled classrooms, upcoming tutoring sessions, and upcoming assignments goes here
-    const enrolledClassrooms: string[] = []; // Replace with actual logic to fetch enrolled classrooms
-    const upcomingTutoringSessions: string[] = []; // Replace with actual logic to fetch upcoming tutoring sessions
-    const upcomingAssignments: string[] = []; // Replace with actual logic to fetch upcoming assignments
-
     return (
       <div>
         <Typography variant="h4">Your Classrooms</Typography>

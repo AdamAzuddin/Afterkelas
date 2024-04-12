@@ -1,13 +1,13 @@
 "use client";
 
 import { Header, HomeView, SideLayout } from "@/components";
-import { useAppDispatch } from "@/redux/hook";
 import React from "react";
 import { useEffect } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { getDocs, query, collection, where } from "firebase/firestore";
 import { db } from "../app/firebase"; // Adjust the path as per your project structure
 import { UserDetails } from "@/utils/interface";
+//TODO: pass userDetails as props
 
 const Home = () => {
   const [user, setUser] = React.useState<User | null>(null);
@@ -50,11 +50,12 @@ const Home = () => {
     };
   }, []);
   console.log(userType);
+  console.log(user?.uid)
 
   return (
     <SideLayout>
       <Header />
-      <HomeView userType={userType} />
+      <HomeView userType={userType} uid={user?.uid} />
     </SideLayout>
   );
 };

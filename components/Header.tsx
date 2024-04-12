@@ -3,7 +3,7 @@ import dashboardSvg from "@/assets/dashboard.svg";
 import book from "@/assets/book.svg";
 import Image from "next/image";
 import { useAppSelector } from "@/redux/hook";
-
+//TODO: add book if path ==/classes or path ==/my-classes
 const Header = () => {
   const { isSidebarOpen } = useAppSelector((state) => state.record);
   return (
