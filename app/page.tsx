@@ -49,9 +49,6 @@ const Home = () => {
       unsubscribe();
     };
   }, []);
-  console.log(userType);
-  console.log(user?.uid)
-
   return (
     <SideLayout>
       <Header />

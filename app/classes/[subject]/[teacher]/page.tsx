@@ -7,10 +7,7 @@ import {
   query,
   collection,
   where,
-  doc,
   updateDoc,
-  getDoc,
-  setDoc,
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import dayjs, { Dayjs } from "dayjs";
