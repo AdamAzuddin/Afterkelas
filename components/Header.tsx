@@ -1,8 +1,8 @@
 "use client";
 import dashboardSvg from "@/assets/dashboard.svg";
-import { HeaderProps } from "@/utils/interface";
+import book from "@/assets/book.svg";
 import Image from "next/image";
-import {  useAppSelector } from "@/redux/hook";
+import { useAppSelector } from "@/redux/hook";
 
 const Header = () => {
   const { isSidebarOpen } = useAppSelector((state) => state.record);
@@ -23,6 +23,7 @@ const Header = () => {
           alt="dashboard"
           className="w-[20px] h-[20px]"
         />
+        <Image src={book} alt="Books" className="w-[20px] h-[20px]" />
         {/* use to display for admin later
         <Image
           priority
