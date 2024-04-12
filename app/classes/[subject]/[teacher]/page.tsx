@@ -44,6 +44,7 @@ const Page = () => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
   const [timeSlotError, setTimeSlotError] = useState<string>("");
   const [user, setUser] = React.useState<User | null>(null);
+  const [bookingError, setBookingError] = useState<string>("");
 
   // Function to handle date selection
   const handleDateChange = (date: Dayjs | null) => {
@@ -94,8 +95,8 @@ const Page = () => {
             const userUid = userDocData.uid;
   
             // Check if the user already has a booking on the same date
-            if (userDocData.booking?.date === isoDate && userDocData.booking?.timeSlot === selectedTimeSlot) {
-              console.error("User already has a booking on this date.");
+            if (userDocData.booking?.date === isoDate) {
+              setBookingError("You already have a booking on this date.");
               return; // Exit function
             }
   
@@ -121,8 +122,8 @@ const Page = () => {
               const teacherUid = teacherDocData.uid;
   
               // Check if the teacher already has a booking on the same date
-              if (teacherDocData.booking?.date === isoDate && teacherDocData.booking?.timeSlot === selectedTimeSlot) {
-                console.error("Teacher already has a booking on this date.");
+              if (teacherDocData.booking?.date === isoDate) {
+                setBookingError("Teacher already has a booking on this date.");
                 return; // Exit function
               }
   
@@ -234,6 +235,7 @@ const Page = () => {
             </Select>
           </FormControl>
         </div>
+        {bookingError && <Typography color="error">{bookingError}</Typography>}
 
         <Button type="submit" variant="contained" color="primary">
           Book Session
