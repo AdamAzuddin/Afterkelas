@@ -61,6 +61,7 @@ const Page = () => {
   // Function to handle form submission
   const handleSubmit = async (event: any) => {
     event.preventDefault(); // Prevent default form submission behavior
+    setBookingError("")
 
     if (selectedDate && selectedTimeSlot) {
       // Parse the selected time slot to extract the start and end times
