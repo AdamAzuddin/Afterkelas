@@ -1,9 +1,82 @@
-import React from 'react'
+"use client";
+import React, { useState, useEffect } from "react";
+import {
+  Typography,
+  Button,
+  Container,
+  Grid,
+  Card,
+  CardContent,
+} from "@mui/material"; // Import Material-UI components
+// Adjust the import path to firebase.js if needed
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { getDocs, query, collection, where } from "firebase/firestore";
+import { doc } from "firebase/firestore"; // Import the 'doc' function from Firestore
+import { db } from "../../app/firebase"; // Adjust the path as per your project structure
 
-const page = () => {
-  return (
-    <div>page</div>
-  )
+interface Classroom {
+  uid: string;
+  teacher: string;
+  subject: string;
+  students: string[]; // Assuming student IDs are stored
 }
 
-export default page
+const MyClassPage: React.FC = () => {
+  const [classroom, setClassroom] = useState<Classroom>();
+
+  const [user, setUser] = React.useState<User | null>(null);
+  useEffect(() => {
+    const auth = getAuth();
+
+    const unsubscribe = onAuthStateChanged(auth, async (user: User | null) => {
+      setUser(user);
+    });
+
+    const getMyClass = async () => {
+      if (user) {
+        try {
+          if (!db) {
+            console.error("Firebase is not initialized.");
+            return;
+          }
+
+          const classroomRef = collection(db, "classrooms");
+
+          const querySnapshot = await getDocs(
+            query(classroomRef, where("teacher", "==", user.uid))
+          );
+
+          if (!querySnapshot.empty) {
+            const classroomData = querySnapshot.docs[0].data() as Classroom;
+            console.log(classroomData.uid)
+            setClassroom(classroomData);
+          } else {
+            console.log(
+              "No classroom document found with the provided teacher reference."
+            );
+          }
+        } catch (error) {
+          console.error("Error fetching classroom data:", error);
+        }
+      } else {
+        console.log("User or teacherDocName is null.");
+      }
+    };
+
+    getMyClass();
+
+    return () => {
+      unsubscribe();
+    };
+  }, [user]);
+
+  return (
+    <Container maxWidth="lg">
+      <Typography variant="h3" gutterBottom>
+        My Class with uid: {classroom?.uid}
+      </Typography>
+    </Container>
+  );
+};
+
+export default MyClassPage;
