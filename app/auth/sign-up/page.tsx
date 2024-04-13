@@ -22,6 +22,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
+import { generateRandomString } from "@/utils/generateNewUid";
 
 const SignUp = () => {
   const router = useRouter();
@@ -73,9 +74,10 @@ const SignUp = () => {
       } else if (userType === "teacher" && subjectId) {
         userData.subject = doc(db, `subjects/${subjectId}`); // Corrected reference to Firestore document
         const newClassroomData = {
-          teacher: doc(db, `users/${userId}`), // Reference to teacher document
-          subject: doc(db, `subjects/${subjectId}`),
-          students: [] // Empty array for students
+          uid: generateRandomString(28),
+          teacher: userId, // Reference to teacher document
+          subject: subjectId,
+          students: [] 
         };
         await addDoc(collection(db, "classrooms"), newClassroomData);
 
