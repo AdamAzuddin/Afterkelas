@@ -11,21 +11,15 @@ import {
 } from "@mui/material";
 import { fetchEnrolledClassrooms } from "../utils/classroomHelpers";
 import ClassroomListItem from "./ClassroomListCard";
-import {
-  getDocs,
-  query,
-  collection,
-  where,
-} from "firebase/firestore";
+import { getDocs, query, collection, where, doc , getDoc} from "firebase/firestore";
 import { db } from "../app/firebase";
 
 const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
-  const upcomingTutoringSessions: string[] = []; // Replace with actual logic to fetch upcoming tutoring sessions
-  const upcomingAssignments: string[] = []; // Replace with actual logic to fetch upcoming assignments
   const [teachersName, setTeachersName] = useState<string[]>([]);
   const [enrolledClassrooms, setEnrolledClassrooms] = useState<
     { teacherName: string; classroomUid: string }[]
   >([]);
+  const [upcomingAssignments, setupcomingAssignments] = useState<string[]>([]);
 
   const [bookings, setBookings] = useState<any[]>([]); // State to store bookings
 
@@ -44,11 +38,10 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
           const querySnapshot = await getDocs(
             query(usersRef, where("uid", "==", uid!))
           );
-      
+
           if (!querySnapshot.empty) {
-            // Assuming there's only one document with the specified uid
             const userData = querySnapshot.docs[0].data();
-            console.log(userData);
+            console.log(userData.bookings);
             setBookings(userData.bookings || []); // Set bookings or initialize to empty array if not present
           } else {
             console.log("No document found with the provided uid.");
@@ -57,9 +50,7 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
           console.error("Error fetching bookings:", error);
         }
       };
-      
-      fetchBookings();
-      
+
       fetchBookings();
     }
   }, [uid, userType]);
@@ -99,6 +90,7 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
                 <ListItem key={index}>
                   <ListItemText
                     primary={`Date: ${booking.date}, Time Slot: ${booking.timeSlot}`}
+                    secondary={`With Teacher: ${booking.teacherName}`}
                   />
                 </ListItem>
               ))}
