@@ -77,7 +77,8 @@ const SignUp = () => {
           uid: generateRandomString(28),
           teacher: userId, // Reference to teacher document
           subject: subjectId,
-          students: [] 
+          students: [],
+          assignments: [], 
         };
         await addDoc(collection(db, "classrooms"), newClassroomData);
 
