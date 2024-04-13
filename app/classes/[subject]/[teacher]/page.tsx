@@ -59,78 +59,82 @@ const Page = () => {
   const handleSubmit = async (event: any) => {
     event.preventDefault(); // Prevent default form submission behavior
     setBookingError("");
-  
+
     if (selectedDate && selectedTimeSlot) {
       // Parse the selected time slot to extract the start and end times
       const [startTime, endTime] = selectedTimeSlot.split(" - ");
-  
+
       // Get the selected date and time in Malaysia timezone
       const selectedDateTime = selectedDate.hour(
         Number(startTime.split(":")[0]) + 8
       ); // Add 8 hours for Malaysia timezone
       selectedDateTime.minute(Number(startTime.split(":")[1]));
-  
+
       // Format the selected date in ISO 8601 format
       const isoDate = selectedDateTime.format("YYYY-MM-DD");
-  
+
       console.log("Booking submitted:", isoDate);
-  
+
       try {
         const auth = getAuth();
         const user = auth.currentUser;
-  
+
         if (user) {
           const usersRef = collection(db, "users");
-  
+
           // Fetch user document
           const userQuerySnapshot = await getDocs(
             query(usersRef, where("email", "==", user.email))
           );
-  
+
           if (!userQuerySnapshot.empty) {
             const userDoc = userQuerySnapshot.docs[0];
             const userDocData = userDoc.data();
             const userUid = userDocData.uid;
             const userName = userDocData.name; // Retrieve user name
             const userType = userDocData.type; // Retrieve user type
-  
+
             // Check if the user already has a booking on the same date and time
             const existingBooking = userDocData.bookings?.find(
               (booking: any) =>
                 booking.date === isoDate &&
                 booking.timeSlot === selectedTimeSlot
             );
-  
+
             if (existingBooking) {
               setBookingError("You already have a booking for this time slot.");
               return; // Exit function
             }
-  
-            // Update user document
-            await updateDoc(userDoc.ref, {
-              bookings: [
-                ...(userDocData.bookings || []),
-                {
-                  date: isoDate,
-                  timeSlot: selectedTimeSlot,
-                  teacherId: userType === "student" ? teacherId : userUid, // Set teacherId for student and userUid for teacher
-                  studentId: userType === "student" ? userUid : teacherId, // Set studentId for teacher and userUid for student
-                },
-              ],
-            });
-  
-            console.log("User booking updated successfully.");
-  
-            // Fetch teacher document
+
             const teacherQuerySnapshot = await getDocs(
               query(usersRef, where("uid", "==", teacherId))
             );
-  
+
             if (!teacherQuerySnapshot.empty) {
               const teacherDoc = teacherQuerySnapshot.docs[0];
               const teacherDocData = teacherDoc.data();
               const teacherName = teacherDocData.name; // Retrieve teacher name
-  
+              // Update user document
+              await updateDoc(userDoc.ref, {
+                bookings: [
+                  ...(userDocData.bookings || []),
+                  {
+                    date: isoDate,
+                    timeSlot: selectedTimeSlot,
+                    teacherId: userType === "student" ? teacherId : userUid, // Set teacherId for student and userUid for teacher
+                    teacherName: teacherName, //
+                    studentId: userType === "student" ? userUid : teacherId, // Set studentId for teacher and userUid for student
+                  },
+                ],
+              });
+            }
+
+            console.log("User booking updated successfully.");
+            if (!teacherQuerySnapshot.empty) {
+              const teacherDoc = teacherQuerySnapshot.docs[0];
+              const teacherDocData = teacherDoc.data();
+              const teacherName = teacherDocData.name; // Retrieve teacher name
+
               // Update teacher document
               await updateDoc(teacherDoc.ref, {
                 bookings: [
@@ -143,7 +147,7 @@ const Page = () => {
                   },
                 ],
               });
-  
+
               console.log("Teacher booking updated successfully.");
             } else {
               console.error("Teacher document not found.");
@@ -161,7 +165,6 @@ const Page = () => {
       console.error("Please select both date and time slot.");
     }
   };
-  
 
   useEffect(() => {
     const auth = getAuth();
