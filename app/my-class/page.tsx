@@ -11,7 +11,6 @@ import {
 // Adjust the import path to firebase.js if needed
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { getDocs, query, collection, where } from "firebase/firestore";
-import { doc } from "firebase/firestore"; // Import the 'doc' function from Firestore
 import { db } from "../../app/firebase"; // Adjust the path as per your project structure
 
 interface Classroom {
@@ -21,8 +20,14 @@ interface Classroom {
   students: string[]; // Assuming student IDs are stored
 }
 
+interface Subject {
+  uid: string;
+  name: string;
+}
+
 const MyClassPage: React.FC = () => {
   const [classroom, setClassroom] = useState<Classroom>();
+  const [subject, setSubject] = useState<Subject>();
 
   const [user, setUser] = React.useState<User | null>(null);
   useEffect(() => {
@@ -47,8 +52,19 @@ const MyClassPage: React.FC = () => {
           );
 
           if (!querySnapshot.empty) {
+            //TODO: Displpay subject using teacher's subject field
             const classroomData = querySnapshot.docs[0].data() as Classroom;
-            console.log(classroomData.uid)
+            const subjectRef = collection(db, "subjects");
+
+            const subjectSnapshot = await getDocs(
+              query(subjectRef, where("uid", "==", classroomData.subject))
+            );
+
+            if (!subjectSnapshot.empty) {
+              const subjectData = subjectSnapshot.docs[0].data() as Subject;
+              setSubject(subjectData)
+            }
+            console.log(classroomData.uid);
             setClassroom(classroomData);
           } else {
             console.log(
@@ -62,6 +78,7 @@ const MyClassPage: React.FC = () => {
         console.log("User or teacherDocName is null.");
       }
     };
+    console.log(subject?.name)
 
     getMyClass();
 
@@ -69,11 +86,13 @@ const MyClassPage: React.FC = () => {
       unsubscribe();
     };
   }, [user]);
+  //TODO: Add button that link to /my-class/new-assignment
 
   return (
     <Container maxWidth="lg">
       <Typography variant="h3" gutterBottom>
-        My Class with uid: {classroom?.uid}
+        {/* My Class with uid: {classroom?.uid} */}
+        Subject uid: 
       </Typography>
     </Container>
   );

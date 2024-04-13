@@ -81,7 +81,7 @@ const SignUp = () => {
           assignments: [], 
         };
         await addDoc(collection(db, "classrooms"), newClassroomData);
-
+        //TODO: Change val of field subject for userType == teacher to string which is subjectId
         // Append the user's userId to the assignedTeachers array of the subject
         const subjectRef = doc(db, `subjects/${subjectId}`);
         await updateDoc(subjectRef, { assignedTeachers: arrayUnion(userId) });
