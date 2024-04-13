@@ -30,7 +30,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [userType, setUserType] = useState("student"); // Default to student
-  const [subjectId, setSubjectId] = useState<string | null>(null); // Subject document ID
+  const [subjectDocName, setSubjectDocName] = useState<string | null>(null); // Subject document ID
   const [passwordError, setPasswordError] = useState(""); // State to hold password error message
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -71,19 +71,19 @@ const SignUp = () => {
 
       if (userType === "student") {
         userData.assignedTeacher = [];
-      } else if (userType === "teacher" && subjectId) {
-        userData.subject = doc(db, `subjects/${subjectId}`); // Corrected reference to Firestore document
+      } else if (userType === "teacher" && subjectDocName) {
+        userData.subject = subjectDocName; // Corrected reference to Firestore document
         const newClassroomData = {
           uid: generateRandomString(28),
           teacher: userId, // Reference to teacher document
-          subject: subjectId,
+          subject: subjectDocName,
           students: [],
           assignments: [], 
         };
         await addDoc(collection(db, "classrooms"), newClassroomData);
-        //TODO: Change val of field subject for userType == teacher to string which is subjectId
+        
         // Append the user's userId to the assignedTeachers array of the subject
-        const subjectRef = doc(db, `subjects/${subjectId}`);
+        const subjectRef = doc(db, `subjects/${subjectDocName}`);
         await updateDoc(subjectRef, { assignedTeachers: arrayUnion(userId) });
       }
 
@@ -159,8 +159,8 @@ const SignUp = () => {
             <FormControl fullWidth variant="outlined" margin="normal">
               <InputLabel>Subject</InputLabel>
               <Select
-                value={subjectId ?? ""}
-                onChange={(e) => setSubjectId(e.target.value as string)}
+                value={subjectDocName ?? ""}
+                onChange={(e) => setSubjectDocName(e.target.value as string)}
                 label="Subject"
               >
                 <MenuItem value="">Select subject</MenuItem>
