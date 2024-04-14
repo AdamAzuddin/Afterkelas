@@ -149,6 +149,7 @@ const Page = () => {
               });
 
               console.log("Teacher booking updated successfully.");
+              window.location.href = '/';
             } else {
               console.error("Teacher document not found.");
             }
