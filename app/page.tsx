@@ -7,7 +7,6 @@ import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { getDocs, query, collection, where } from "firebase/firestore";
 import { db } from "../app/firebase"; // Adjust the path as per your project structure
 import { UserDetails } from "@/utils/interface";
-//TODO: pass userDetails as props
 
 const Home = () => {
   const [user, setUser] = React.useState<User | null>(null);
@@ -51,7 +50,6 @@ const Home = () => {
   }, []);
   return (
     <SideLayout>
-      <Header />
       <HomeView userType={userType} uid={user?.uid} />
     </SideLayout>
   );

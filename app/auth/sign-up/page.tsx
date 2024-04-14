@@ -22,6 +22,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
+import { generateRandomString } from "@/utils/generateNewUid";
 
 const SignUp = () => {
   const router = useRouter();
@@ -29,7 +30,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [userType, setUserType] = useState("student"); // Default to student
-  const [subjectId, setSubjectId] = useState<string | null>(null); // Subject document ID
+  const [subjectDocName, setSubjectDocName] = useState<string | null>(null); // Subject document ID
   const [passwordError, setPasswordError] = useState(""); // State to hold password error message
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -70,17 +71,19 @@ const SignUp = () => {
 
       if (userType === "student") {
         userData.assignedTeacher = [];
-      } else if (userType === "teacher" && subjectId) {
-        userData.subject = doc(db, `subjects/${subjectId}`); // Corrected reference to Firestore document
+      } else if (userType === "teacher" && subjectDocName) {
+        userData.subject = subjectDocName; // Corrected reference to Firestore document
         const newClassroomData = {
-          teacher: doc(db, `users/${userId}`), // Reference to teacher document
-          subject: doc(db, `subjects/${subjectId}`),
-          students: [] // Empty array for students
+          uid: generateRandomString(28),
+          teacher: userId, // Reference to teacher document
+          subject: subjectDocName,
+          students: [],
+          assignments: [], 
         };
         await addDoc(collection(db, "classrooms"), newClassroomData);
-
+        
         // Append the user's userId to the assignedTeachers array of the subject
-        const subjectRef = doc(db, `subjects/${subjectId}`);
+        const subjectRef = doc(db, `subjects/${subjectDocName}`);
         await updateDoc(subjectRef, { assignedTeachers: arrayUnion(userId) });
       }
 
@@ -156,8 +159,8 @@ const SignUp = () => {
             <FormControl fullWidth variant="outlined" margin="normal">
               <InputLabel>Subject</InputLabel>
               <Select
-                value={subjectId ?? ""}
-                onChange={(e) => setSubjectId(e.target.value as string)}
+                value={subjectDocName ?? ""}
+                onChange={(e) => setSubjectDocName(e.target.value as string)}
                 label="Subject"
               >
                 <MenuItem value="">Select subject</MenuItem>

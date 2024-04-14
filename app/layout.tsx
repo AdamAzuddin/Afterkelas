@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Navbar, Footer } from "@/components";
+import { Navbar, Footer, Header } from "@/components";
 import { ReduxProvider } from "@/redux/provider";
 import { ToastContainer } from "react-toastify";
 
@@ -23,6 +23,7 @@ export default function RootLayout({
         <ReduxProvider>
           <Navbar />
           <ToastContainer />
+          <Header />
           <div style={{ minHeight: "100vh" }}>{children}</div>
           <Footer />
         </ReduxProvider>
