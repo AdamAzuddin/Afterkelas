@@ -10,7 +10,14 @@ import {
 } from "@mui/material"; // Import Material-UI components
 // Adjust the import path to firebase.js if needed
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import { getDocs, query, collection, where } from "firebase/firestore";
+import {
+  getDocs,
+  query,
+  collection,
+  where,
+  getDoc,
+  doc,
+} from "firebase/firestore";
 import { db } from "../../app/firebase"; // Adjust the path as per your project structure
 
 interface Classroom {
@@ -27,7 +34,8 @@ interface Subject {
 
 const MyClassPage: React.FC = () => {
   const [classroom, setClassroom] = useState<Classroom>();
-  const [subject, setSubject] = useState<Subject>();
+  const [subjectName, setSubjectName] = useState();
+  const [subjectDocName, setsubjectDocName] = useState("");
 
   const [user, setUser] = React.useState<User | null>(null);
   useEffect(() => {
@@ -52,19 +60,18 @@ const MyClassPage: React.FC = () => {
           );
 
           if (!querySnapshot.empty) {
-            //TODO: Displpay subject using teacher's subject field
             const classroomData = querySnapshot.docs[0].data() as Classroom;
-            const subjectRef = collection(db, "subjects");
+            setsubjectDocName(classroomData.subject);
+            const subjectRef = doc(db, "subjects", classroomData.subject);
 
-            const subjectSnapshot = await getDocs(
-              query(subjectRef, where("uid", "==", classroomData.subject))
-            );
+            const subjectSnapshot = await getDoc(subjectRef);
 
-            if (!subjectSnapshot.empty) {
-              const subjectData = subjectSnapshot.docs[0].data() as Subject;
-              setSubject(subjectData)
+            if (subjectSnapshot.exists()) {
+              const subjectData = subjectSnapshot.data();
+
+              setSubjectName(subjectData.name);
             }
-            console.log(classroomData.uid);
+
             setClassroom(classroomData);
           } else {
             console.log(
@@ -78,7 +85,8 @@ const MyClassPage: React.FC = () => {
         console.log("User or teacherDocName is null.");
       }
     };
-    console.log(subject?.name)
+    
+    
 
     getMyClass();
 
@@ -91,8 +99,7 @@ const MyClassPage: React.FC = () => {
   return (
     <Container maxWidth="lg">
       <Typography variant="h3" gutterBottom>
-        {/* My Class with uid: {classroom?.uid} */}
-        Subject uid: 
+        Subject name: {subjectName}
       </Typography>
     </Container>
   );
