@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import {getStorage} from "firebase/storage";
 import "firebase/firestore";
 
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -23,3 +24,4 @@ const app = initializeApp(firebaseConfig);
 // Export Firestore instance
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+export const storage = getStorage(app);

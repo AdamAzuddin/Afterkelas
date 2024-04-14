@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { db } from "../../../firebase";
+import { db, storage } from "../../../firebase"; // Import storage from firebase
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 import {
   doc,
   updateDoc,
@@ -11,6 +12,7 @@ import {
   getDocs,
   where,
 } from "firebase/firestore"; // Import arrayUnion
+import { getDownloadURL } from "firebase/storage";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -37,6 +39,7 @@ const Page = () => {
   const [selectedDate, setSelectedDate] = React.useState<Dayjs | null>(dayjs());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
   const [timeSlotError, setTimeSlotError] = useState<string>("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null); // State to hold the selected file
 
   const handleTitleChange = (e: any) => {
     setAssignmentTitle(e.target.value);
@@ -56,6 +59,12 @@ const Page = () => {
     setSelectedTimeSlot(event.target.value);
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
@@ -69,19 +78,38 @@ const Page = () => {
 
       // Get the first document matching the query
       const classroomDoc = querySnapshot.docs[0];
+
       // Format the selectedDate to yyyy-mm-dd string
       const formattedDate = selectedDate
         ? selectedDate.format("YYYY-MM-DD")
         : "";
 
-      // Update the assignments array in the classroom document
-      await updateDoc(classroomDoc.ref, {
-        assignments: arrayUnion({
-          title: assignmentTitle,
-          description: assignmentDescription,
-          dueDate: formattedDate,
-        }),
-      });
+      // Upload the selected file to Firebase Storage
+      if (selectedFile) {
+        const storageInstance = getStorage();
+        const fileRef = ref(storageInstance, selectedFile.name);
+        await uploadBytes(fileRef, selectedFile);
+        const fileUrl = await getDownloadURL(fileRef);
+        
+        // Update the assignments array in the classroom document
+        await updateDoc(classroomDoc.ref, {
+          assignments: arrayUnion({
+            title: assignmentTitle,
+            description: assignmentDescription,
+            dueDate: formattedDate,
+            file: fileUrl, // Assign the file URL
+          }),
+        });
+      } else {
+        // Update the assignments array in the classroom document without the file
+        await updateDoc(classroomDoc.ref, {
+          assignments: arrayUnion({
+            title: assignmentTitle,
+            description: assignmentDescription,
+            dueDate: formattedDate,
+          }),
+        });
+      }
 
       console.log("Assignment updated successfully!");
     } catch (error) {
@@ -125,6 +153,8 @@ const Page = () => {
             </DemoContainer>
           </LocalizationProvider>
         </div>
+        {/* File input field */}
+        <input type="file" onChange={handleFileChange} />
         <Button type="submit" variant="contained" color="primary">
           Update Assignment
         </Button>
