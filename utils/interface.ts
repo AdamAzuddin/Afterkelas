@@ -60,3 +60,11 @@ export interface UserDetails {
   userType: string;
   name: string;
 }
+
+export interface Classroom {
+  uid: string;
+  teacher: string;
+  subject: string;
+  students: string[]; 
+  assignments: []
+}

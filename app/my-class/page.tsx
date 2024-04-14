@@ -1,10 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import {
-  Typography,
-  Button,
-  Container,
-} from "@mui/material"; // Import Material-UI components
+import { Typography, Button, Container } from "@mui/material"; // Import Material-UI components
 // Adjust the import path to firebase.js if needed
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import {
@@ -16,12 +12,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { db } from "../../app/firebase"; // Adjust the path as per your project structure
-interface Classroom {
-  uid: string;
-  teacher: string;
-  subject: string;
-  students: string[]; // Assuming student IDs are stored
-}
+import { Classroom } from "@/utils/interface";
 const MyClassPage: React.FC = () => {
   const [classroom, setClassroom] = useState<Classroom>();
   const [subjectName, setSubjectName] = useState();
