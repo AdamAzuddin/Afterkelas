@@ -54,55 +54,57 @@ const SignIn = () => {
   };
   return (
     <Container maxWidth="sm">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <h1>Sign In</h1>
-        <form onSubmit={handleSignIn} className="space-y-4">
-          <TextField
-            type="email"
-            label="Email"
-            variant="outlined"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            type="password"
-            label="Password"
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            fullWidth
-            margin="normal"
-          />
-          <Button type="submit" variant="contained" color="primary" fullWidth>
-            Sign In
-          </Button>
-        </form>
-        <Box mt={2} textAlign="center">
-          Don't have an account?{" "}
-          <Link href="/auth/sign-up">
-            <span
-              style={{
-                color: "blue",
-                cursor: "pointer",
-                textDecoration: "underline",
-              }}
-            >
-              Sign up
-            </span>
-          </Link>
+      {typeof window !== "undefined" && (
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <h1>Sign In</h1>
+          <form onSubmit={handleSignIn} className="space-y-4">
+            <TextField
+              type="email"
+              label="Email"
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              type="password"
+              label="Password"
+              variant="outlined"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              fullWidth
+              margin="normal"
+            />
+            <Button type="submit" variant="contained" color="primary" fullWidth>
+              Sign In
+            </Button>
+          </form>
+          <Box mt={2} textAlign="center">
+            Don't have an account?{" "}
+            <Link href="/auth/sign-up">
+              <span
+                style={{
+                  color: "blue",
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                }}
+              >
+                Sign up
+              </span>
+            </Link>
+          </Box>
         </Box>
-      </Box>
+      )}
     </Container>
   );
 };
