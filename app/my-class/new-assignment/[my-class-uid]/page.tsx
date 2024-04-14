@@ -112,6 +112,7 @@ const Page = () => {
       }
 
       console.log("Assignment updated successfully!");
+      window.location.href = '/my-class';
     } catch (error) {
       console.error("Error updating assignment:", error);
     }
