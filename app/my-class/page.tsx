@@ -85,7 +85,7 @@ const MyClassPage: React.FC = () => {
       </Typography>
       {assignments?.map((assignment, index) => (
         <div key={index}>
-          <p>{assignment}</p>
+          <p>{assignment.title}</p>
         </div>
       ))}
       <Button
