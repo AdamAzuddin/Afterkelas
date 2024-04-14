@@ -226,7 +226,7 @@ const Page = () => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={["DatePicker"]}>
               <DatePicker
-                label="Basic date picker"
+                label="Choose a date"
                 value={selectedDate}
                 onChange={handleDateChange}
               />
