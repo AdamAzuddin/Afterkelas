@@ -28,6 +28,7 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
+import { generateRandomString } from "@/utils/generateNewUid";
 
 const Page = () => {
   const pathname = usePathname();
@@ -94,6 +95,7 @@ const Page = () => {
         // Update the assignments array in the classroom document
         await updateDoc(classroomDoc.ref, {
           assignments: arrayUnion({
+            assignmentId: generateRandomString(28),
             title: assignmentTitle,
             description: assignmentDescription,
             dueDate: formattedDate,
@@ -104,6 +106,7 @@ const Page = () => {
         // Update the assignments array in the classroom document without the file
         await updateDoc(classroomDoc.ref, {
           assignments: arrayUnion({
+            assignmentId: generateRandomString(28),
             title: assignmentTitle,
             description: assignmentDescription,
             dueDate: formattedDate,

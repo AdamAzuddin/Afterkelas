@@ -70,6 +70,7 @@ export interface Classroom {
 }
 
 export interface Assignment {
+  assignmentId: string;
   title: string;
   dueDate: string;
   description?: string;

@@ -19,6 +19,9 @@ import {
 } from "firebase/firestore";
 import { db } from "../app/firebase";
 import { Assignment } from "@/utils/interface";
+import AssignmentCard from "./AssignmentCard";
+
+
 const Assignments: React.FC<HeaderProps> = ({ userType, uid }) => {
   const [enrolledClassrooms, setEnrolledClassrooms] = useState<
     { classroomUid: string }[]
@@ -122,30 +125,7 @@ const Assignments: React.FC<HeaderProps> = ({ userType, uid }) => {
           {assignments.length > 0 ? (
             <List>
               {assignments.map((assignment, index) => (
-                <ListItem
-                  key={index}
-                  className="border border-black rounded"
-                >
-                  <ListItemText
-                    primary={`Title: ${assignment.title}`}
-                    secondary={`Due Date: ${assignment.dueDate}`}
-                  />
-                  {assignment.description && (
-                    <ListItemText
-                      primary={`Description: ${assignment.description}`}
-                    />
-                  )}
-                  {assignment.file && (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      href={assignment.file}
-                      target="_blank"
-                    >
-                      View File
-                    </Button>
-                  )}
-                </ListItem>
+                <AssignmentCard key={index} assignment={assignment} />
               ))}
             </List>
           ) : (
