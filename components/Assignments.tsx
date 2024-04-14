@@ -19,8 +19,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../app/firebase";
 import { Assignment } from "@/utils/interface";
-
-const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
+const Assignments: React.FC<HeaderProps> = ({ userType, uid }) => {
   const [enrolledClassrooms, setEnrolledClassrooms] = useState<
     { classroomUid: string }[]
   >([]);
@@ -118,49 +117,15 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
   if (userType === "student") {
     return (
       <div>
-        <Typography variant="h4">Your Classrooms</Typography>
-        {enrolledClassrooms.length > 0 ? (
-          <List className="flex mx-5">
-            {enrolledClassrooms.map((classroom, index) => (
-              <ListItem key={index}>
-                <ListItemText
-                  primary={`Classroom UID: ${classroom.classroomUid}`}
-                />
-              </ListItem>
-            ))}
-          </List>
-        ) : (
-          <div>
-            <Typography variant="body1">
-              You're not a part of any classroom. Would you like to join one?
-            </Typography>
-          </div>
-        )}
-
-        <div style={{ marginTop: "20px" }}>
-          <Typography variant="h4">Upcoming Tutoring Sessions:</Typography>
-          {bookings.length > 0 ? (
-            <List>
-              {bookings.map((booking, index) => (
-                <ListItem key={index}>
-                  <ListItemText
-                    primary={`Date: ${booking.date}, Time Slot: ${booking.timeSlot}`}
-                    secondary={`With Teacher: ${booking.teacherName}`}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          ) : (
-            <Typography variant="body1">No bookings available</Typography>
-          )}
-        </div>
-
         <div>
           <Typography variant="h4">Your Assignments</Typography>
           {assignments.length > 0 ? (
-            <List className="mx-5">
+            <List>
               {assignments.map((assignment, index) => (
-                <ListItem key={index}>
+                <ListItem
+                  key={index}
+                  className="border border-black rounded"
+                >
                   <ListItemText
                     primary={`Title: ${assignment.title}`}
                     secondary={`Due Date: ${assignment.dueDate}`}
@@ -169,6 +134,16 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
                     <ListItemText
                       primary={`Description: ${assignment.description}`}
                     />
+                  )}
+                  {assignment.file && (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      href={assignment.file}
+                      target="_blank"
+                    >
+                      View File
+                    </Button>
                   )}
                 </ListItem>
               ))}
@@ -197,4 +172,4 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
   }
 };
 
-export default HomeView;
+export default Assignments;

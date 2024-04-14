@@ -4,6 +4,7 @@ import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { getDocs, query, collection, where } from "firebase/firestore";
 import { db } from "../../app/firebase";
 import { UserDetails } from "@/utils/interface";
+import Assignments from "@/components/Assignments";
 
 const AssignmentPage = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -49,7 +50,7 @@ const AssignmentPage = () => {
     <div>
       {userType === "student" && (
         <div>
-          <h2>Welcome, Student!</h2>
+          <Assignments userType={"student"} uid={user?.uid}/>
           {/* Content for students */}
         </div>
       )}
