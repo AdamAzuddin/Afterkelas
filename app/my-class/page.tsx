@@ -17,6 +17,7 @@ const MyClassPage: React.FC = () => {
   const [classroom, setClassroom] = useState<Classroom>();
   const [subjectName, setSubjectName] = useState();
   const [subjectDocName, setsubjectDocName] = useState("");
+  const [assignments, setAssignments] = useState<any[]>();
 
   const [user, setUser] = React.useState<User | null>(null);
   useEffect(() => {
@@ -54,6 +55,7 @@ const MyClassPage: React.FC = () => {
             }
 
             setClassroom(classroomData);
+            setAssignments(classroomData.assignments);
           } else {
             console.log(
               "No classroom document found with the provided teacher reference."
@@ -74,11 +76,18 @@ const MyClassPage: React.FC = () => {
     };
   }, [user]);
 
+  console.log(assignments);
+
   return (
     <Container maxWidth="lg">
       <Typography variant="h3" gutterBottom>
         Subject name: {subjectName}
       </Typography>
+      {assignments?.map((assignment, index) => (
+        <div key={index}>
+          <p>{assignment}</p>
+        </div>
+      ))}
       <Button
         href={`/my-class/new-assignment/${classroom?.uid}`}
         variant="contained"
