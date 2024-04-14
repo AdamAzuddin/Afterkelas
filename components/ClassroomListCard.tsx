@@ -2,12 +2,10 @@ import React from "react";
 import { ListItemButton, ListItemText, List, Box } from "@mui/material";
 
 interface ClassroomListItemProps {
-  teacherName: string;
   classroomUid: string;
 }
 
 const ClassroomListItem: React.FC<ClassroomListItemProps> = ({
-  teacherName,
   classroomUid,
 }) => {
   const handleClick = () => {
@@ -35,7 +33,6 @@ const ClassroomListItem: React.FC<ClassroomListItemProps> = ({
       <List>
         <ListItemButton onClick={handleClick}>
           <ListItemText
-            primary={`${teacherName}'s Class`}
           />
         </ListItemButton>
       </List>

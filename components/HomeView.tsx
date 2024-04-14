@@ -9,7 +9,6 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
-import { fetchEnrolledClassrooms } from "../utils/classroomHelpers";
 import ClassroomListItem from "./ClassroomListCard";
 import { getDocs, query, collection, where, doc , getDoc} from "firebase/firestore";
 import { db } from "../app/firebase";
@@ -17,7 +16,7 @@ import { db } from "../app/firebase";
 const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
   const [teachersName, setTeachersName] = useState<string[]>([]);
   const [enrolledClassrooms, setEnrolledClassrooms] = useState<
-    { teacherName: string; classroomUid: string }[]
+    {classroomUid: string }[]
   >([]);
   const [upcomingAssignments, setupcomingAssignments] = useState<string[]>([]);
 
@@ -25,12 +24,32 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
 
   useEffect(() => {
     if (userType === "student") {
-      fetchEnrolledClassrooms(uid!).then((enrolledClassrooms) => {
-        setTeachersName(
-          enrolledClassrooms.map(({ teacherName }) => teacherName)
-        );
-        setEnrolledClassrooms(enrolledClassrooms);
-      });
+      // fetchENrolledClassrooms
+      const fetchEnrolledClassrooms = async () => {
+        try {
+          const classroomsRef = collection(db, "classrooms");
+          const querySnapshot = await getDocs(classroomsRef);
+
+          const classrooms: { teacherName: string; classroomUid: string }[] = [];
+
+          querySnapshot.forEach((doc) => {
+            const classroomData = doc.data();
+            if (classroomData.students) {
+              const student = classroomData.students.find((student: any) => student.studentUid === uid);
+              if (student) {
+                classrooms.push({
+                  teacherName: classroomData.teacherName,
+                  classroomUid: doc.id
+                });
+              }
+            }
+          });
+
+          setEnrolledClassrooms(classrooms);
+        } catch (error) {
+          console.error("Error fetching enrolled classrooms:", error);
+        }
+      };
 
       const fetchBookings = async () => {
         try {
@@ -71,37 +90,32 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
         }
       }
 
+      fetchEnrolledClassrooms();
       fetchBookings();
       fetchAssignments();
     }
   }, [uid, userType]);
 
+  console.log("Enrolled classroom: ",enrolledClassrooms);
   if (userType === "student") {
     return (
       <div>
         <Typography variant="h4">Your Classrooms</Typography>
-        {teachersName.length > 0 ? (
-          <>
-            <List className="flex mx-5">
-              {enrolledClassrooms.map((classroom, index) => (
-                <ClassroomListItem
-                  key={index}
-                  teacherName={classroom.teacherName}
-                  classroomUid={classroom.classroomUid}
-                />
-              ))}
-            </List>
-          </>
-        ) : (
-          <div>
-            <Typography variant="body1">
-              You're not a part of any classroom. Would you like to join one?
-            </Typography>
-            <Button variant="contained" color="primary">
-              Join a Classroom
-            </Button>
-          </div>
-        )}
+        {enrolledClassrooms.length > 0 ? (
+        <List className="flex mx-5">
+          {enrolledClassrooms.map((classroom, index) => (
+            <ListItem key={index}>
+              <ListItemText primary={`Classroom UID: ${classroom.classroomUid}`} />
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        <div>
+          <Typography variant="body1">
+            You're not a part of any classroom. Would you like to join one?
+          </Typography>
+        </div>
+      )}
 
         <div style={{ marginTop: "20px" }}>
           <Typography variant="h4">Upcoming Tutoring Sessions:</Typography>
