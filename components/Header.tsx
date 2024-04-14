@@ -11,9 +11,7 @@ const Header = () => {
   const { isSidebarOpen } = useAppSelector((state) => state.record);
   return (
     <div
-      className={`flex flex-wrap justify-between items-center mt-5 py-5 ${
-        !isSidebarOpen ? "mx-6" : "mx-1"
-      }`}
+      className={`flex flex-wrap justify-between items-center mt-2 py-5 `}
     >
       <div
         className={`mb-2 flex justify-start items-center ${
@@ -25,11 +23,11 @@ const Header = () => {
             priority
             src={dashboardSvg}
             alt="dashboard"
-            className="w-[20px] h-[20px]"
+            className="w-[30px] h-[30px]"
           />
         )}
-        {(pathname === "/classes" || pathname === "/my-class") && (
-          <Image src={book} alt="Books" className="w-[20px] h-[20px]" />
+        {(pathname === "/classes" || pathname === "/my-class" || pathname === "/assignments") && (
+          <Image src={book} alt="Books" className="w-[30px] h-[30px]" />
         )}
 
         {/* use to display for admin later
