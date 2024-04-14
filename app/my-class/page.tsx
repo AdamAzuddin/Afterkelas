@@ -4,9 +4,6 @@ import {
   Typography,
   Button,
   Container,
-  Grid,
-  Card,
-  CardContent,
 } from "@mui/material"; // Import Material-UI components
 // Adjust the import path to firebase.js if needed
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
@@ -19,19 +16,12 @@ import {
   doc,
 } from "firebase/firestore";
 import { db } from "../../app/firebase"; // Adjust the path as per your project structure
-
 interface Classroom {
   uid: string;
   teacher: string;
   subject: string;
   students: string[]; // Assuming student IDs are stored
 }
-
-interface Subject {
-  uid: string;
-  name: string;
-}
-
 const MyClassPage: React.FC = () => {
   const [classroom, setClassroom] = useState<Classroom>();
   const [subjectName, setSubjectName] = useState();
@@ -85,8 +75,6 @@ const MyClassPage: React.FC = () => {
         console.log("User or teacherDocName is null.");
       }
     };
-    
-    
 
     getMyClass();
 
@@ -94,13 +82,19 @@ const MyClassPage: React.FC = () => {
       unsubscribe();
     };
   }, [user]);
-  //TODO: Add button that link to /my-class/new-assignment
 
   return (
     <Container maxWidth="lg">
       <Typography variant="h3" gutterBottom>
         Subject name: {subjectName}
       </Typography>
+      <Button
+        href={`/my-class/new-assignment/${classroom?.uid}`}
+        variant="contained"
+        color="primary"
+      >
+        Add a new assignment
+      </Button>
     </Container>
   );
 };
