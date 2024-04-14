@@ -171,7 +171,7 @@ const Page = () => {
               //TODO: Update student uid to students array in classroom collection doc
               //TODO: Send confirmation email to student and teacher
               //TODO: Send success toas
-              window.location.href = '/';
+              if (typeof window !== "undefined") {window.location.href = '/'};
             } else {
               console.error("Teacher document not found.");
             }

@@ -11,7 +11,7 @@ const TeacherCard: React.FC<TeacherCardProps> = ({ name, uid }) => {
     // Construct the dynamic route path based on the subject name and teacher's UID
     const path = `/classes/${encodeURIComponent(name.toLowerCase())}/${uid}`;
     // Navigate to the dynamic route
-    window.location.href = path;
+    if (typeof window !== "undefined") {window.location.href = path;}
   };
 
   return (

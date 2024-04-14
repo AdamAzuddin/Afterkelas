@@ -118,7 +118,7 @@ const HamburgerMenu: React.FC = () => {
   );
 
   const handleLinkClick = (path: string) => {
-    window.location.reload(); // Refresh the page on link click
+    if (typeof window !== "undefined") {window.location.reload();}
   };
 
   return (
