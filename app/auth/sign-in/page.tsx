@@ -1,8 +1,7 @@
-"use client";
-
-import React, { useState } from "react";
+"use client"
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword, User } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -22,6 +21,12 @@ const SignIn = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isClient, setIsClient] = useState(false); // State to track client-side rendering
+
+  // useEffect to set isClient to true when component is mounted
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,9 +57,10 @@ const SignIn = () => {
       console.error("Error signing in:", error);
     }
   };
+
   return (
     <Container maxWidth="sm">
-      {typeof window !== "undefined" && (
+      {isClient && ( // Render content only on the client side
         <Box
           sx={{
             marginTop: 8,
