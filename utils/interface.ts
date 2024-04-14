@@ -68,3 +68,10 @@ export interface Classroom {
   students: string[]; 
   assignments: []
 }
+
+export interface Assignment {
+  title: string;
+  dueDate: string;
+  description?: string;
+  file?: string;
+}
