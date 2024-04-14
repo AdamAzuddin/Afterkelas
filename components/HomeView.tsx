@@ -51,7 +51,28 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
         }
       };
 
+      const fetchAssignments = async() => {
+        //TODO: fetch userData.assignments
+        try {
+          const usersRef = collection(db, "users");
+          const querySnapshot = await getDocs(
+            query(usersRef, where("uid", "==", uid!))
+          );
+
+          if (!querySnapshot.empty) {
+            const userData = querySnapshot.docs[0].data();
+            console.log(userData.bookings);
+            setBookings(userData.bookings || []); // Set bookings or initialize to empty array if not present
+          } else {
+            console.log("No document found with the provided uid.");
+          }
+        } catch (error) {
+          console.error("Error fetching bookings:", error);
+        }
+      }
+
       fetchBookings();
+      fetchAssignments();
     }
   }, [uid, userType]);
 

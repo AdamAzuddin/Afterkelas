@@ -24,6 +24,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { SelectChangeEvent } from "@mui/material/Select";
+import { studentData } from "@/utils/data";
 interface TeacherDetails {
   name: String;
   subject: String;
@@ -128,6 +129,7 @@ const Page = () => {
                 ],
               });
             }
+            
 
             console.log("User booking updated successfully.");
             if (!teacherQuerySnapshot.empty) {
@@ -148,7 +150,25 @@ const Page = () => {
                 ],
               });
 
+              const classroomsRef = collection(db,"classrooms"); 
+              const classroomsQuerySnapshot = await getDocs(query(classroomsRef, where("teacher","==", teacherId)));
+              if (!classroomsQuerySnapshot.empty){
+                const classroomDoc = classroomsQuerySnapshot.docs[0];
+                const classroomDocData = classroomDoc.data();
+
+                await updateDoc(classroomDoc.ref, {
+                  students: [
+                    ...(classroomDocData.students || []),
+                    {
+                      studentUid: userUid,
+                      studentName: userName
+                    }
+                  ]
+                })
+              }
+
               console.log("Teacher booking updated successfully.");
+              //TODO: Update student uid to students array in classroom collection doc
               //TODO: Send confirmation email to student and teacher
               //TODO: Send success toas
               window.location.href = '/';
