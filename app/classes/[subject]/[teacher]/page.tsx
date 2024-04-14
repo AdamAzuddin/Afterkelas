@@ -84,7 +84,7 @@ const Page = () => {
 
           // Fetch user document
           const userQuerySnapshot = await getDocs(
-            query(usersRef, where("email", "==", user.email))
+            query(usersRef, where("uid", "==", user.uid))
           );
 
           if (!userQuerySnapshot.empty) {
