@@ -149,6 +149,8 @@ const Page = () => {
               });
 
               console.log("Teacher booking updated successfully.");
+              //TODO: Send confirmation email to student and teacher
+              //TODO: Send success toas
               window.location.href = '/';
             } else {
               console.error("Teacher document not found.");
