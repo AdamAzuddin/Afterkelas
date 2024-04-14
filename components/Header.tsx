@@ -3,8 +3,11 @@ import dashboardSvg from "@/assets/dashboard.svg";
 import book from "@/assets/book.svg";
 import Image from "next/image";
 import { useAppSelector } from "@/redux/hook";
-//TODO: add book if path ==/classes or path ==/my-classes
+import { usePathname } from "next/navigation";
+
 const Header = () => {
+  const pathname = usePathname();
+  console.log("Pathname: ", pathname);
   const { isSidebarOpen } = useAppSelector((state) => state.record);
   return (
     <div
@@ -17,13 +20,18 @@ const Header = () => {
           !isSidebarOpen ? "ml-[1em]" : "ml-0"
         }`}
       >
-        <Image
-          priority
-          src={dashboardSvg}
-          alt="dashboard"
-          className="w-[20px] h-[20px]"
-        />
-        <Image src={book} alt="Books" className="w-[20px] h-[20px]" />
+        {pathname === "/" && (
+          <Image
+            priority
+            src={dashboardSvg}
+            alt="dashboard"
+            className="w-[20px] h-[20px]"
+          />
+        )}
+        {(pathname === "/classes" || pathname === "/my-class") && (
+          <Image src={book} alt="Books" className="w-[20px] h-[20px]" />
+        )}
+
         {/* use to display for admin later
         <Image
           priority
