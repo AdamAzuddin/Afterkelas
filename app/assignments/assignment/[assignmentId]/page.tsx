@@ -7,6 +7,7 @@ import {
   doc,
   updateDoc,
   arrayUnion,
+  addDoc,
   collection,
   query,
   getDocs,
@@ -31,6 +32,13 @@ import {
 import { generateRandomString } from "@/utils/generateNewUid";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { UserDetails } from "@/utils/interface";
+
+interface Submission{
+  uid: string;
+  studentId: string | undefined | null;
+  assignmentId: string;
+  file: string | undefined | null;
+}
 
 const page = () => {
   const pathname = usePathname();
@@ -106,45 +114,51 @@ const page = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const classroomCollectionRef = collection(db, "classrooms");
-      //const q = await getDocs(query(classroomCollectionRef, where("")));
+      const submissionsCollectionRef = collection(db, "submissions");
+    
+      const createSubmission = async (submission: Submission) => {
+        try {
+          await addDoc(submissionsCollectionRef, submission);
+          console.log("Submission created successfully!");
+        } catch (error) {
+          console.error("Error creating submission:", error);
+        }
+      };
+      
+      let newSubmission: Submission; // Define newSubmission variable outside the if-else block
+      
+      if (selectedFile) {
+        const storageInstance = getStorage();
+        const fileRef = ref(storageInstance, selectedFile.name);
+        await uploadBytes(fileRef, selectedFile);
+        const fileUrl = await getDownloadURL(fileRef);
+        newSubmission = {
+          uid: generateRandomString(28),
+          assignmentId: assignmentId,
+          studentId: userUid,
+          file: fileUrl
+        };
+      } else {
+        newSubmission = {
+          uid: generateRandomString(28),
+          assignmentId: assignmentId,
+          studentId: userUid,
+          file: ""
+        };
+      }
+      
+      createSubmission(newSubmission);
+      if (typeof window !== "undefined") {window.location.href = '/assignments';}
     } catch (error) {
       console.error("Error updating assignment:", error);
     }
+    
   };
 
   return (
     <div>
-      <Typography variant="h1">Edit Assignment</Typography>
+      <Typography variant="h1">Submit assignment</Typography>
       <form onSubmit={handleSubmit}>
-        <TextField
-          label="Title"
-          type="text"
-          value={assignmentTitle}
-          onChange={handleTitleChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Description"
-          value={assignmentDescription}
-          onChange={handleDescriptionChange}
-          fullWidth
-          multiline
-          rows={4}
-          margin="normal"
-        />
-        <div style={{ marginBottom: "20px" }}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["DatePicker"]}>
-              <DatePicker
-                label="Choose Due Date"
-                value={selectedDate}
-                onChange={handleDateChange}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-        </div>
         {/* File input field */}
         <input type="file" onChange={handleFileChange} />
         <Button type="submit" variant="contained" color="primary">
