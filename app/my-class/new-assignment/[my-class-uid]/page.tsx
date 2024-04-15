@@ -91,7 +91,15 @@ const Page = () => {
         const fileRef = ref(storageInstance, selectedFile.name);
         await uploadBytes(fileRef, selectedFile);
         const fileUrl = await getDownloadURL(fileRef);
-        
+        // Clone the students array and add additional properties to each object
+        const submissions = classroomDoc
+          .data()
+          .students.map((student: any) => ({
+            ...student,
+            hasSubmitted: false, // Initially set hasSubmitted to false
+            fileSubmission: "", // Initially set fileSubmission to empty string
+          }));
+
         // Update the assignments array in the classroom document
         await updateDoc(classroomDoc.ref, {
           assignments: arrayUnion({
@@ -100,22 +108,33 @@ const Page = () => {
             description: assignmentDescription,
             dueDate: formattedDate,
             file: fileUrl, // Assign the file URL
+            submissions: submissions,
           }),
         });
       } else {
         // Update the assignments array in the classroom document without the file
+        // Clone the students array and add additional properties to each object
+        const submissions = classroomDoc
+          .data()
+          .students.map((student: any) => ({
+            ...student,
+            hasSubmitted: false, // Initially set hasSubmitted to false
+          }));
         await updateDoc(classroomDoc.ref, {
           assignments: arrayUnion({
             assignmentId: generateRandomString(28),
             title: assignmentTitle,
             description: assignmentDescription,
             dueDate: formattedDate,
+            submissions: submissions,
           }),
         });
       }
 
       console.log("Assignment updated successfully!");
-      if (typeof window !== "undefined") {window.location.href = '/my-class';}
+      if (typeof window !== "undefined") {
+        window.location.href = "/my-class";
+      }
     } catch (error) {
       console.error("Error updating assignment:", error);
     }
