@@ -179,10 +179,12 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
         </div>
       </div>
     );
-  } else if (userType === "teacher" || userType === "admin") {
-    // Leave empty div for teacher and admin
-    return <div></div>;
-  } else {
+  } else if (userType === "teacher" ) {
+    return <div>Hi teacher!</div>;
+  }else if (userType === "admin"){
+    return <div>Hi admin!</div>;
+  } 
+  else {
     // Display sign-in message with a link to /auth/sign-in
     return (
       <div>
