@@ -56,10 +56,6 @@ const Page = () => {
     setTimeSlotError(""); // Reset the timeSlotError when the date changes
   };
 
-  const handleTimeSlotChange = (event: SelectChangeEvent<string>) => {
-    setSelectedTimeSlot(event.target.value);
-  };
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
