@@ -40,19 +40,57 @@ interface Submission{
   file: string | undefined | null;
 }
 
+interface AssignmentData {
+  title: string;
+  description: string;
+  dueDate: string; // Assuming dueDate is a string
+  file: string | undefined | null;
+  // Add other properties here if needed
+}
+
+// Function to fetch assignment details based on assignment ID
+const fetchAssignment = async (assignmentId:any) => {
+  try {
+    // Find the classroom that contains the assignment with the given ID
+    const classroomsRef = collection(db, "classrooms");
+    const querySnapshot = await getDocs(classroomsRef);
+    let assignmentData = null;
+
+    querySnapshot.forEach((classroomDoc) => {
+      const classroomData = classroomDoc.data();
+      if (classroomData.assignments) {
+        const assignment = classroomData.assignments.find(
+          (assignment:any) => assignment.assignmentId === assignmentId
+        );
+        if (assignment) {
+          assignmentData = assignment;
+          return; // Exit loop once assignment is found
+        }
+      }
+    });
+
+    if (assignmentData) {
+      return assignmentData;
+    } else {
+      console.log(`Assignment with ID ${assignmentId} does not exist.`);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching assignment:", error);
+    return null;
+  }
+};
+
 const page = () => {
   const pathname = usePathname();
   const pathSegments = pathname.split("/"); // Split the pathname into segments
   const assignmentId = pathSegments[pathSegments.length - 1]; // Access the last segment
-
-  const [assignmentTitle, setAssignmentTitle] = useState("");
-  const [assignmentDescription, setAssignmentDescription] = useState("");
-  const [selectedDate, setSelectedDate] = React.useState<Dayjs | null>(dayjs());
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
-  const [timeSlotError, setTimeSlotError] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null); // State to hold the selected file
   const [user, setUser] = React.useState<User | null>(null);
   const [userUid, setUserUid] = React.useState<string | null>(null);
+  const [assignmentData, setAssignmentData] = useState<AssignmentData | null>(
+    null
+  ); // Specify AssignmentData as the type of assignmentData
 
   useEffect(() => {
     const auth = getAuth();
@@ -90,21 +128,6 @@ const page = () => {
       unsubscribe();
     };
   }, []);
-
-  const handleTitleChange = (e: any) => {
-    setAssignmentTitle(e.target.value);
-  };
-
-  const handleDescriptionChange = (e: any) => {
-    setAssignmentDescription(e.target.value);
-  };
-
-  const handleDateChange = (date: Dayjs | null) => {
-    setSelectedDate(dayjs(date)); // Convert formatted date back to Dayjs object
-    setSelectedTimeSlot(""); // Reset the selectedTimeSlot when the date changes
-    setTimeSlotError(""); // Reset the timeSlotError when the date changes
-  };
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
@@ -155,14 +178,38 @@ const page = () => {
     
   };
 
+  useEffect(() => {
+    // Fetch assignment data when the component mounts
+    const fetchData = async () => {
+      const data = await fetchAssignment(assignmentId);
+      setAssignmentData(data);
+    };
+    fetchData();
+  }, [assignmentId]); // Fetch data whenever assignmentId changes
+
+
   return (
     <div>
-      <Typography variant="h1">Submit assignment</Typography>
+      <Typography variant="h1">Submit Assignment</Typography>
+      {assignmentData ? (
+        <div>
+          <Typography variant="h2">Title: {assignmentData.title}</Typography>
+          <Typography variant="body1">Description: {assignmentData.description}</Typography>
+          <Typography variant="body2">Due Date: {assignmentData.dueDate}</Typography>
+          {assignmentData.file && (
+            <Button variant="contained" color="primary" href={assignmentData.file} target="_blank">
+              View File
+            </Button>
+          )}
+        </div>
+      ) : (
+        <Typography variant="body1">Loading assignment data...</Typography>
+      )}
       <form onSubmit={handleSubmit}>
         {/* File input field */}
         <input type="file" onChange={handleFileChange} />
         <Button type="submit" variant="contained" color="primary">
-          Submit assignment
+          Submit Assignment
         </Button>
       </form>
     </div>

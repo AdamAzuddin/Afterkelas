@@ -17,11 +17,7 @@ const AssignmentCard:React.FC<AssignmentItemProps> = ({ assignment }) => {
       <Link href={`/assignments/assignment/${assignmentId}`}>
           <ListItemText primary={`Title: ${title}`} secondary={`Due Date: ${dueDate}`} />
           {description && <ListItemText primary={`Description: ${description}`} />}
-          {file && (
-            <Button variant="contained" color="primary" href={file} target="_blank">
-              View File
-            </Button>
-          )}
+          <Button variant="contained" color="primary" href={`/assignments/assignment/${assignmentId}`} target="_blank">Submit</Button>
       </Link>
     </ListItem>
   );
