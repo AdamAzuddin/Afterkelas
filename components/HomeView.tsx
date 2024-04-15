@@ -21,9 +21,7 @@ import { db } from "../app/firebase";
 import { Assignment } from "@/utils/interface";
 
 const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
-  const [enrolledClassrooms, setEnrolledClassrooms] = useState<
-    { classroomUid: string }[]
-  >([]);
+  const [enrolledClassrooms, setEnrolledClassrooms] = useState<string[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
 
   const [bookings, setBookings] = useState<any[]>([]); // State to store bookings
@@ -34,27 +32,25 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
         try {
           const classroomsRef = collection(db, "classrooms");
           const querySnapshot = await getDocs(classroomsRef);
-
-          const classrooms: { classroomUid: string }[] = [];
-
+      
+          const classrooms: string[] = [];
+      
           querySnapshot.forEach((doc) => {
             const classroomData = doc.data();
             if (classroomData.students) {
-              const isEnrolled = classroomData.students.some(
-                (student: any) => student.studentUid === uid
-              );
+              const isEnrolled = classroomData.students.includes(uid);
               if (isEnrolled) {
-                classrooms.push({ classroomUid: doc.id });
+                classrooms.push(doc.id);
               }
             }
           });
-
+      
           setEnrolledClassrooms(classrooms);
         } catch (error) {
           console.error("Error fetching enrolled classrooms:", error);
         }
       };
-
+      
       const fetchBookings = async () => {
         try {
           const usersRef = collection(db, "users");
@@ -82,27 +78,19 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
     if (enrolledClassrooms.length > 0) {
       const fetchAssignments = async () => {
         try {
-          const assignmentsPromises = enrolledClassrooms.map(
-            async (classroom) => {
-              const classroomDocRef = doc(
-                db,
-                "classrooms",
-                classroom.classroomUid
-              );
-              const classroomDocSnapshot = await getDoc(classroomDocRef);
-
-              if (classroomDocSnapshot.exists()) {
-                const classroomData = classroomDocSnapshot.data();
-                return classroomData ? classroomData.assignments || [] : [];
-              } else {
-                console.log(
-                  `Classroom with UID ${classroom.classroomUid} does not exist.`
-                );
-                return [];
-              }
+          const assignmentsPromises = enrolledClassrooms.map(async (classroom) => {
+            const classroomDocRef = doc(db, "classrooms", classroom);
+            const classroomDocSnapshot = await getDoc(classroomDocRef);
+      
+            if (classroomDocSnapshot.exists()) {
+              const classroomData = classroomDocSnapshot.data();
+              return classroomData ? classroomData.assignments || [] : [];
+            } else {
+              console.log(`Classroom with UID ${classroom} does not exist.`);
+              return [];
             }
-          );
-
+          });
+      
           const assignmentsResults = await Promise.all(assignmentsPromises);
           const mergedAssignments = assignmentsResults.flat();
           setAssignments(mergedAssignments);
@@ -110,6 +98,7 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
           console.error("Error fetching assignments:", error);
         }
       };
+      
 
       fetchAssignments();
     }
@@ -121,10 +110,10 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
         <Typography variant="h4">Your Classrooms</Typography>
         {enrolledClassrooms.length > 0 ? (
           <List className="flex mx-5">
-            {enrolledClassrooms.map((classroom, index) => (
+            {enrolledClassrooms.map((classroomUid, index) => (
               <ListItem key={index}>
                 <ListItemText
-                  primary={`Classroom UID: ${classroom.classroomUid}`}
+                  primary={`Classroom UID: ${classroomUid}`}
                 />
               </ListItem>
             ))}
