@@ -78,15 +78,29 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
     if (enrolledClassrooms.length > 0) {
       const fetchAssignments = async () => {
         try {
-          const assignmentsPromises = enrolledClassrooms.map(async (classroom) => {
-            const classroomDocRef = doc(db, "classrooms", classroom);
+          const assignmentsPromises = enrolledClassrooms.map(async (classroomUid) => {
+            const classroomDocRef = doc(db, "classrooms", classroomUid);
             const classroomDocSnapshot = await getDoc(classroomDocRef);
       
             if (classroomDocSnapshot.exists()) {
               const classroomData = classroomDocSnapshot.data();
-              return classroomData ? classroomData.assignments || [] : [];
+              const assignments = classroomData ? classroomData.assignments || [] : [];
+      
+              // Filter assignments based on whether they have been submitted or not
+              const filteredAssignments = await Promise.all(assignments.map(async (assignment:any) => {
+                const submissionsRef = collection(db, "submissions");
+                const submissionQuerySnapshot = await getDocs(query(submissionsRef, where("assignmentId", "==", assignment.assignmentId)));
+      
+                if (submissionQuerySnapshot.empty) {
+                  return assignment; // Return assignment if no submission exists for it
+                } else {
+                  return null; // Return null if submission exists
+                }
+              }));
+      
+              return filteredAssignments.filter((assignment) => assignment !== null); // Filter out null assignments
             } else {
-              console.log(`Classroom with UID ${classroom} does not exist.`);
+              console.log(`Classroom with UID ${classroomUid} does not exist.`);
               return [];
             }
           });
