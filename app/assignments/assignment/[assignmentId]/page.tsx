@@ -29,6 +29,8 @@ import {
   TextField,
 } from "@mui/material";
 import { generateRandomString } from "@/utils/generateNewUid";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { UserDetails } from "@/utils/interface";
 
 const page = () => {
   const pathname = usePathname();
@@ -41,6 +43,45 @@ const page = () => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
   const [timeSlotError, setTimeSlotError] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null); // State to hold the selected file
+  const [user, setUser] = React.useState<User | null>(null);
+  const [userUid, setUserUid] = React.useState<string | null>(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+
+    const unsubscribe = onAuthStateChanged(auth, async (user: User | null) => {
+      setUser(user);
+      if (user) {
+        try {
+          if (!db) {
+            console.error("Firebase is not initialized.");
+            return;
+          }
+
+          const usersRef = collection(db, "users");
+          const querySnapshot = await getDocs(
+            query(usersRef, where("uid", "==", user.uid))
+          );
+
+          if (!querySnapshot.empty) {
+            // Assuming there's only one document with the given uid
+            const userData = querySnapshot.docs[0].data() as UserDetails; // Cast to UserDetails
+            setUserUid(userData.uid);
+          } else {
+            console.log("No user document found with the provided uid.");
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      } else {
+        setUserUid(null); // Reset userType if no user is signed in
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const handleTitleChange = (e: any) => {
     setAssignmentTitle(e.target.value);
@@ -65,13 +106,12 @@ const page = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      
+      const classroomCollectionRef = collection(db, "classrooms");
+      //const q = await getDocs(query(classroomCollectionRef, where("")));
     } catch (error) {
       console.error("Error updating assignment:", error);
     }
   };
-
-
 
   return (
     <div>
@@ -112,7 +152,7 @@ const page = () => {
         </Button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
