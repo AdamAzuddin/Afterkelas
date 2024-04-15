@@ -159,16 +159,13 @@ const Page = () => {
                 await updateDoc(classroomDoc.ref, {
                   students: [
                     ...(classroomDocData.students || []),
-                    {
-                      studentUid: userUid,
-                      studentName: userName
-                    }
+                    userUid // Assuming userUid is a string representing the UID of the student
                   ]
                 })
+                
               }
 
               console.log("Teacher booking updated successfully.");
-              //TODO: Update student uid to students array in classroom collection doc
               //TODO: Send confirmation email to student and teacher
               //TODO: Send success toas
               if (typeof window !== "undefined") {window.location.href = '/'};
