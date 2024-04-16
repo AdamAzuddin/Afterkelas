@@ -27,7 +27,11 @@ const page = () => {
       // Find the classroom that contains the assignment with the given ID
       const submissionsRef = collection(db, "submissions");
       const submissionQuerySnapshot = await getDocs(
-        query(submissionsRef, where("assignmentId", "==", assignmentId))
+        query(
+          submissionsRef,
+          where("assignmentId", "==", assignmentId),
+          where("hasBeenMarked", "==", false)
+        )
       );
 
       // Create an array to store the submissions
@@ -62,7 +66,13 @@ const page = () => {
         <div key={index}>
           <p>Submission {index + 1}</p>
           <p>Student ID: {submission.studentId}</p>
-            <Button variant="contained" color="primary" href={`/assignments/submission/${assignmentId}/${submission.uid}`}>View submission</Button>
+          <Button
+            variant="contained"
+            color="primary"
+            href={`/assignments/submission/${assignmentId}/${submission.uid}`}
+          >
+            View submission
+          </Button>
           {/* Add more details as needed */}
         </div>
       ))}

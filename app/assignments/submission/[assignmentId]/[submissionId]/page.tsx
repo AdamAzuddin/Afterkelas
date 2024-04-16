@@ -30,7 +30,10 @@ const page = () => {
     try {
       const submissionsRef = collection(db, "submissions");
       const submissionQuerySnapshot = await getDocs(
-        query(submissionsRef, where("uid", "==", submissionId))
+        query(
+          submissionsRef,
+          where("uid", "==", submissionId)
+        )
       );
       const submission = submissionQuerySnapshot.docs[0].data();
       setSubmission(submission);
