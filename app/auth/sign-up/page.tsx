@@ -73,6 +73,7 @@ const SignUp = () => {
         userData.assignedTeacher = [];
       } else if (userType === "teacher" && subjectDocName) {
         userData.subject = subjectDocName; // Corrected reference to Firestore document
+        userData.bookings = [];
         const newClassroomData = {
           uid: generateRandomString(28),
           teacher: userId, // Reference to teacher document

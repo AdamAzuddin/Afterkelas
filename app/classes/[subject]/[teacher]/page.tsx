@@ -156,7 +156,6 @@ const Page = () => {
               if (!classroomsQuerySnapshot.empty){
                 const classroomDoc = classroomsQuerySnapshot.docs[0];
                 const classroomDocData = classroomDoc.data();
-
                 await updateDoc(classroomDoc.ref, {
                   students: [
                     ...(classroomDocData.students || []),
@@ -169,7 +168,7 @@ const Page = () => {
               console.log("Teacher booking updated successfully.");
               //TODO: Send confirmation email to student and teacher
               //TODO: Send success toas
-              //if (typeof window !== "undefined") {window.location.href = '/'};
+              if (typeof window !== "undefined") {window.location.href = '/'};
             } else {
               console.error("Teacher document not found.");
             }
