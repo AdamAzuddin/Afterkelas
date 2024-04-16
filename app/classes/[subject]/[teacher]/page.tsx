@@ -34,6 +34,7 @@ const Page = () => {
   const pathname = usePathname();
   const pathSegments = pathname.split("/"); // Split the pathname into segments
   const teacherId = pathSegments[pathSegments.length - 1]; // Access the last segment
+  const teacherName = pathSegments[pathSegments.length -2]
   const [teacherDetails, setTeacherDetails] = useState<TeacherDetails | null>(
     null
   );
@@ -114,7 +115,7 @@ const Page = () => {
             if (!teacherQuerySnapshot.empty) {
               const teacherDoc = teacherQuerySnapshot.docs[0];
               const teacherDocData = teacherDoc.data();
-              const teacherName = teacherDocData.name; // Retrieve teacher name
+              console.log("Teacher Name: " + teacherName)
               // Update user document
               await updateDoc(userDoc.ref, {
                 bookings: [
@@ -168,7 +169,7 @@ const Page = () => {
               console.log("Teacher booking updated successfully.");
               //TODO: Send confirmation email to student and teacher
               //TODO: Send success toas
-              if (typeof window !== "undefined") {window.location.href = '/'};
+              //if (typeof window !== "undefined") {window.location.href = '/'};
             } else {
               console.error("Teacher document not found.");
             }
