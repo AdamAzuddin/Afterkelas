@@ -38,6 +38,8 @@ interface Submission {
   studentId: string | undefined | null;
   assignmentId: string;
   file: string | undefined | null;
+  hasBeenGraded: boolean;
+  mark: Number | undefined;
 }
 
 interface AssignmentData {
@@ -134,21 +136,19 @@ const page = () => {
       setSelectedFile(e.target.files[0]);
     }
   };
+  const createSubmission = async (submission: Submission) => {
+    try {
+      const submissionsCollectionRef = collection(db, "submissions");
+      await addDoc(submissionsCollectionRef, submission);
+      console.log("Submission created successfully!");
+    } catch (error) {
+      console.error("Error creating submission:", error);
+    }
+  };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const submissionsCollectionRef = collection(db, "submissions");
-
-      const createSubmission = async (submission: Submission) => {
-        try {
-          await addDoc(submissionsCollectionRef, submission);
-          console.log("Submission created successfully!");
-        } catch (error) {
-          console.error("Error creating submission:", error);
-        }
-      };
-
       let newSubmission: Submission; // Define newSubmission variable outside the if-else block
 
       if (selectedFile) {
@@ -161,6 +161,8 @@ const page = () => {
           assignmentId: assignmentId,
           studentId: userUid,
           file: fileUrl,
+          hasBeenGraded: false,
+          mark: 0,
         };
 
         createSubmission(newSubmission);
@@ -168,7 +170,7 @@ const page = () => {
           window.location.href = "/assignments";
         }
       } else {
-        setnoFileError("Please select a file")
+        setnoFileError("Please select a file");
       }
     } catch (error) {
       console.error("Error updating assignment:", error);
