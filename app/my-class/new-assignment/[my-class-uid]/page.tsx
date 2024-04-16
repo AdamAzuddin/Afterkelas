@@ -39,6 +39,7 @@ const Page = () => {
   const [assignmentDescription, setAssignmentDescription] = useState("");
   const [selectedDate, setSelectedDate] = React.useState<Dayjs | null>(dayjs());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
+  const [noFileError, setnoFileError] = useState("");
   const [timeSlotError, setTimeSlotError] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null); // State to hold the selected file
 
@@ -87,7 +88,7 @@ const Page = () => {
         const fileRef = ref(storageInstance, selectedFile.name);
         await uploadBytes(fileRef, selectedFile);
         const fileUrl = await getDownloadURL(fileRef);
-        
+
         // Update the assignments array in the classroom document
         await updateDoc(classroomDoc.ref, {
           assignments: arrayUnion({
@@ -98,20 +99,13 @@ const Page = () => {
             file: fileUrl, // Assign the file URL
           }),
         });
+        console.log("Assignment updated successfully!");
+        if (typeof window !== "undefined") {
+          window.location.href = "/my-class";
+        }
       } else {
-        // Update the assignments array in the classroom document without the file
-        await updateDoc(classroomDoc.ref, {
-          assignments: arrayUnion({
-            assignmentId: generateRandomString(28),
-            title: assignmentTitle,
-            description: assignmentDescription,
-            dueDate: formattedDate,
-          }),
-        });
+        setnoFileError("Please select a file");
       }
-
-      console.log("Assignment updated successfully!");
-      if (typeof window !== "undefined") {window.location.href = '/my-class';}
     } catch (error) {
       console.error("Error updating assignment:", error);
     }
@@ -155,6 +149,7 @@ const Page = () => {
         </div>
         {/* File input field */}
         <input type="file" onChange={handleFileChange} />
+        {noFileError && <Typography className="text-red-700">{noFileError}</Typography>}
         <Button type="submit" variant="contained" color="primary">
           Create Assignment
         </Button>
