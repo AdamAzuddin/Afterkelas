@@ -18,6 +18,7 @@ import { Paper, Typography, Button, TextField } from "@mui/material";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { getDownloadURL } from "firebase/storage";
 
+//TODO: Test and debug this file
 const page = () => {
   const pathname = usePathname();
   const pathSegments = pathname.split("/"); // Split the pathname into segments
