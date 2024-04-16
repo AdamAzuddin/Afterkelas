@@ -156,7 +156,7 @@ const Page = () => {
         {/* File input field */}
         <input type="file" onChange={handleFileChange} />
         <Button type="submit" variant="contained" color="primary">
-          Update Assignment
+          Create Assignment
         </Button>
       </form>
     </div>
