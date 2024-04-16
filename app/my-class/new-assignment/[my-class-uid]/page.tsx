@@ -149,6 +149,7 @@ const Page = () => {
         </div>
         {/* File input field */}
         <input type="file" onChange={handleFileChange} />
+        <Button href="/assignments/generate-assignment">Generate assignment</Button>
         {noFileError && <Typography className="text-red-700">{noFileError}</Typography>}
         <Button type="submit" variant="contained" color="primary">
           Create Assignment
