@@ -32,15 +32,8 @@ import {
 import { generateRandomString } from "@/utils/generateNewUid";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { UserDetails } from "@/utils/interface";
+import { Submission } from "@/utils/interface";
 
-interface Submission {
-  uid: string;
-  studentId: string | undefined | null;
-  assignmentId: string;
-  file: string | undefined | null;
-  hasBeenGraded: boolean;
-  mark: Number | undefined;
-}
 
 interface AssignmentData {
   title: string;
@@ -163,6 +156,7 @@ const page = () => {
           file: fileUrl,
           hasBeenGraded: false,
           mark: 0,
+          markedFile: "",
         };
 
         createSubmission(newSubmission);
@@ -178,7 +172,6 @@ const page = () => {
   };
 
   useEffect(() => {
-    // Fetch assignment data when the component mounts
     const fetchData = async () => {
       const data = await fetchAssignment(assignmentId);
       setAssignmentData(data);

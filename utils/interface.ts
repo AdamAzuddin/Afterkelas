@@ -76,3 +76,13 @@ export interface Assignment {
   description?: string;
   file?: string;
 }
+
+export interface Submission {
+  uid: string;
+  studentId: string | undefined | null;
+  assignmentId: string;
+  file: string | undefined | null;
+  hasBeenGraded: boolean;
+  mark: Number | undefined;
+  markedFile:string | undefined | null; 
+}
