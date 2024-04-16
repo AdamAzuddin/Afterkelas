@@ -15,12 +15,17 @@ import {
 } from "firebase/firestore"; // Import arrayUnion
 import { db, storage } from "@/app/firebase"; // Import storage from firebase
 import { Paper, Typography, Button, TextField } from "@mui/material";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL } from "firebase/storage";
 
 const page = () => {
   const pathname = usePathname();
   const pathSegments = pathname.split("/"); // Split the pathname into segments
   const submissionId = pathSegments[pathSegments.length - 1]; // Access the last segment
   const [submission, setSubmission] = useState<DocumentData>();
+  const [mark, setMark] = useState<Number>(0);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null); // State to hold the selected file
+
   const fetchSubmission = async (submissionId: string) => {
     try {
       const submissionsRef = collection(db, "submissions");
@@ -28,7 +33,6 @@ const page = () => {
         query(submissionsRef, where("uid", "==", submissionId))
       );
       const submission = submissionQuerySnapshot.docs[0].data();
-      console.log(submission.assignmentId);
       setSubmission(submission);
     } catch (error) {
       console.error("Error fetching assignment:", error);
@@ -36,10 +40,52 @@ const page = () => {
     }
   };
 
-  const handleReturnSubmission = async () => {};
+  const handleReturnSubmission = async () => {
+    try {
+      const uid = submission?.uid;
+      const submissionsRef = collection(db, "submissions");
+      const submissionQuerySnapshot = await getDocs(
+        query(submissionsRef, where("uid", "==", uid))
+      );
+      const storageInstance = getStorage();
+      const fileRef = ref(storageInstance, selectedFile?.name);
+      await uploadBytes(fileRef, selectedFile!);
+      const fileUrl = await getDownloadURL(fileRef);
 
-  const handleChangeGrade = async () => {};
+      if (!submissionQuerySnapshot.empty) {
+        const submissionDocRef = doc(
+          db,
+          "submissions",
+          submissionQuerySnapshot.docs[0].id
+        );
+        await updateDoc(submissionDocRef, {
+          hasBeenMarked: true,
+          mark: mark,
+          markedFile: fileUrl,
+        });
 
+        console.log("Submission returned successfully!");
+        if (typeof window !== "undefined") {
+          window.location.href = "/assignments/submission";
+        }
+      } else {
+        console.log("Submission not found.");
+      }
+    } catch (error) {
+      console.error("Error updating mark:", error);
+    }
+  };
+
+  const handleChangeGrade = async (e: any) => {
+    const newMark = e.target.value; // Get the new mark value from the event
+    setMark(newMark); // Update the state with the new mark value
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
   fetchSubmission(submissionId);
   return (
     <Paper elevation={3} style={{ padding: "20px", marginBottom: "10px" }}>
@@ -78,14 +124,7 @@ const page = () => {
           />
         </div>
         <div>
-          <Button
-            variant="contained"
-            component="label"
-            style={{ marginBottom: "10px" }}
-          >
-            Upload Marked File
-            <input type="file" hidden />
-          </Button>
+          <input type="file" onChange={handleFileChange} />
         </div>
         <div>
           <Button

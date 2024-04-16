@@ -17,7 +17,7 @@ const AssignmentCard:React.FC<AssignmentItemProps> = ({ assignment,userType }) =
   let buttonText = "";
   if (userType=="student"){
     buttonRef = `/assignments/assignment/${assignmentId}`
-    buttonText = "Submit assignment"
+    buttonText = "View assignment"
   } else if (userType=="teacher"){
     buttonRef = `/assignments/submission/${assignmentId}`
     buttonText = "View submissions"

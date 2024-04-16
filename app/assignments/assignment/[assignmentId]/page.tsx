@@ -4,9 +4,6 @@ import { usePathname } from "next/navigation";
 import { db, storage } from "../../../firebase"; // Import storage from firebase
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import {
-  doc,
-  updateDoc,
-  arrayUnion,
   addDoc,
   collection,
   query,
@@ -14,20 +11,9 @@ import {
   where,
 } from "firebase/firestore"; // Import arrayUnion
 import { getDownloadURL } from "firebase/storage";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { SelectChangeEvent } from "@mui/material/Select";
-import dayjs, { Dayjs } from "dayjs";
 import {
   Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   Typography,
-  TextField,
 } from "@mui/material";
 import { generateRandomString } from "@/utils/generateNewUid";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
