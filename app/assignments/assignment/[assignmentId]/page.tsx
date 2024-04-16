@@ -33,7 +33,7 @@ import { generateRandomString } from "@/utils/generateNewUid";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { UserDetails } from "@/utils/interface";
 
-interface Submission{
+interface Submission {
   uid: string;
   studentId: string | undefined | null;
   assignmentId: string;
@@ -49,7 +49,7 @@ interface AssignmentData {
 }
 
 // Function to fetch assignment details based on assignment ID
-const fetchAssignment = async (assignmentId:any) => {
+const fetchAssignment = async (assignmentId: any) => {
   try {
     // Find the classroom that contains the assignment with the given ID
     const classroomsRef = collection(db, "classrooms");
@@ -60,7 +60,7 @@ const fetchAssignment = async (assignmentId:any) => {
       const classroomData = classroomDoc.data();
       if (classroomData.assignments) {
         const assignment = classroomData.assignments.find(
-          (assignment:any) => assignment.assignmentId === assignmentId
+          (assignment: any) => assignment.assignmentId === assignmentId
         );
         if (assignment) {
           assignmentData = assignment;
@@ -85,6 +85,7 @@ const page = () => {
   const pathname = usePathname();
   const pathSegments = pathname.split("/"); // Split the pathname into segments
   const assignmentId = pathSegments[pathSegments.length - 1]; // Access the last segment
+  const [noFileError, setnoFileError] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null); // State to hold the selected file
   const [user, setUser] = React.useState<User | null>(null);
   const [userUid, setUserUid] = React.useState<string | null>(null);
@@ -138,7 +139,7 @@ const page = () => {
     e.preventDefault();
     try {
       const submissionsCollectionRef = collection(db, "submissions");
-    
+
       const createSubmission = async (submission: Submission) => {
         try {
           await addDoc(submissionsCollectionRef, submission);
@@ -147,9 +148,9 @@ const page = () => {
           console.error("Error creating submission:", error);
         }
       };
-      
+
       let newSubmission: Submission; // Define newSubmission variable outside the if-else block
-      
+
       if (selectedFile) {
         const storageInstance = getStorage();
         const fileRef = ref(storageInstance, selectedFile.name);
@@ -159,23 +160,19 @@ const page = () => {
           uid: generateRandomString(28),
           assignmentId: assignmentId,
           studentId: userUid,
-          file: fileUrl
+          file: fileUrl,
         };
+
+        createSubmission(newSubmission);
+        if (typeof window !== "undefined") {
+          window.location.href = "/assignments";
+        }
       } else {
-        newSubmission = {
-          uid: generateRandomString(28),
-          assignmentId: assignmentId,
-          studentId: userUid,
-          file: ""
-        };
+        setnoFileError("Please select a file")
       }
-      
-      createSubmission(newSubmission);
-      if (typeof window !== "undefined") {window.location.href = '/assignments';}
     } catch (error) {
       console.error("Error updating assignment:", error);
     }
-    
   };
 
   useEffect(() => {
@@ -187,17 +184,25 @@ const page = () => {
     fetchData();
   }, [assignmentId]); // Fetch data whenever assignmentId changes
 
-
   return (
     <div>
       <Typography variant="h1">Submit Assignment</Typography>
       {assignmentData ? (
         <div>
           <Typography variant="h2">Title: {assignmentData.title}</Typography>
-          <Typography variant="body1">Description: {assignmentData.description}</Typography>
-          <Typography variant="body2">Due Date: {assignmentData.dueDate}</Typography>
+          <Typography variant="body1">
+            Description: {assignmentData.description}
+          </Typography>
+          <Typography variant="body2">
+            Due Date: {assignmentData.dueDate}
+          </Typography>
           {assignmentData.file && (
-            <Button variant="contained" color="primary" href={assignmentData.file} target="_blank">
+            <Button
+              variant="contained"
+              color="primary"
+              href={assignmentData.file}
+              target="_blank"
+            >
               View File
             </Button>
           )}
@@ -208,6 +213,9 @@ const page = () => {
       <form onSubmit={handleSubmit}>
         {/* File input field */}
         <input type="file" onChange={handleFileChange} />
+        {noFileError && (
+          <Typography className="text-red-700">{noFileError}</Typography>
+        )}
         <Button type="submit" variant="contained" color="primary">
           Submit Assignment
         </Button>
