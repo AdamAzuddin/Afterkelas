@@ -8,11 +8,11 @@ import {
   Select,
   MenuItem,
   Typography,
-  Paper,
 } from "@mui/material";
 
 const Page: React.FC<any> = () => {
   const [topic, setTopic] = useState<any>("");
+  const [topicDetails, setTopicDetails] = useState<any>("");
   const [numQuestions, setNumQuestions] = useState<any>("");
   const [questionFormat, setQuestionFormat] = useState<any>("");
   const [difficulty, setDifficulty] = useState<any>("");
@@ -23,25 +23,28 @@ const Page: React.FC<any> = () => {
     setError("");
   
     // Check if all fields are filled
-    if (!topic || !numQuestions || !questionFormat || !difficulty) {
+    if (!topic || !topicDetails || !numQuestions || !questionFormat || !difficulty) {
       setError("Please fill in all the fields.");
       return;
     }
   
     // Construct prompt based on provided parameters
-    let prompt = `I am a teacher teaching high school students and I want you to generate questions with the following criteria:\n`;
+    let prompt = `As a teacher, I want you to generate questions for my high school students based on the following criteria:\n`;
   
-    prompt += `Topic: ${topic}\n`;
-    prompt += `Number of Questions: ${numQuestions}\n`;
-    prompt += `Question Format: ${questionFormat}\n`;
-    prompt += `Difficulty: ${difficulty}\n`;
+    prompt += `Topic: ${topic} (${topicDetails})\n`; // Provide the topic and its details
+    prompt += `Number of Questions: ${numQuestions}\n`; // Specify the number of questions required
+    prompt += `Question Format: ${questionFormat}\n`; // Specify the format of questions (e.g., multiple choice, true/false)
+    prompt += `Difficulty: ${difficulty}\n`; // Specify the difficulty level of questions
+    
     prompt += `\nPlease respond with the questions only. Ensure that your response includes line breaks and correct spacings for proper formatting when converted to a PDF.\n`;
-    console.log(prompt);
-
-    //TODO: Connect with OpenAi api and complete this function
-    // Call your API here with the generated prompt
+    
+    // TODO: Call your API here with the generated prompt
     // Update 'generatedSheet' state with the response
     // Handle errors if any
+    console.log(prompt); // For testing purposes, log the generated prompt
+    
+    // For now, set a dummy response
+    setGeneratedSheet("Generated questions will be displayed here.");
   };
   
 
@@ -56,6 +59,15 @@ const Page: React.FC<any> = () => {
         onChange={(e) => setTopic(e.target.value)}
         fullWidth
         className="my-6"
+        // Description for teacher: Specify the main topic for the questions (e.g., Trigonometry)
+      />
+      <TextField
+        label="Topic Details"
+        value={topicDetails}
+        onChange={(e) => setTopicDetails(e.target.value)}
+        fullWidth
+        className="my-6"
+        // Description for teacher: Specify specific details or subtopics related to the main topic
       />
       <TextField
         label="Number of Questions"
@@ -65,12 +77,14 @@ const Page: React.FC<any> = () => {
         fullWidth
         className="my-6"
         inputProps={{ min: 0 }}
+        // Description for teacher: Specify the number of questions required
       />
       <FormControl fullWidth className="my-6">
         <InputLabel>Question Format</InputLabel>
         <Select
           value={questionFormat}
           onChange={(e) => setQuestionFormat(e.target.value)}
+          // Description for teacher: Specify the format of questions (e.g., multiple choice, true/false)
         >
           <MenuItem value="">Select format</MenuItem>
           <MenuItem value="multiple_choice">Multiple Choice</MenuItem>
@@ -85,6 +99,7 @@ const Page: React.FC<any> = () => {
         <Select
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
+          // Description for teacher: Specify the difficulty level of questions
         >
           <MenuItem value="">Select difficulty</MenuItem>
           <MenuItem value="easy">Easy</MenuItem>
@@ -98,6 +113,7 @@ const Page: React.FC<any> = () => {
         onClick={handleGenerateSheet}
         fullWidth
         className="mb-4"
+        // Description for teacher: Click to generate exercise sheet based on provided criteria
       >
         Generate Sheet
       </Button>
