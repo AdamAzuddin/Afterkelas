@@ -19,6 +19,11 @@ const Page: React.FC<any> = () => {
   const [generatedSheet, setGeneratedSheet] = useState<any>("");
   const [error, setError] = useState<any>("");
 
+  //TODO(Dev 1 Team Teacher): complete this function, return a pdf file in form of url. Tips: checkout /assignments/assignment to see how we change file to url
+  const convertStringsToPdf = () =>{
+
+  }
+
   const handleGenerateSheet = () => {
     setError("");
   
@@ -38,11 +43,11 @@ const Page: React.FC<any> = () => {
     
     prompt += `\nPlease respond with the questions only. Ensure that your response includes line breaks and correct spacings for proper formatting when converted to a PDF.\n`;
     
-    // TODO: Call your API here with the generated prompt
+    // TODO(Shameer):Call your API here with the generated prompt
     // Update 'generatedSheet' state with the response
     // Handle errors if any
-    console.log(prompt); // For testing purposes, log the generated prompt
     
+    convertStringsToPdf()
     // For now, set a dummy response
     setGeneratedSheet("Generated questions will be displayed here.");
   };

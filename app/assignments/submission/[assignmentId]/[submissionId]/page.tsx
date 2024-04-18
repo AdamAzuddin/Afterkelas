@@ -5,20 +5,17 @@ import { Submission } from "@/utils/interface";
 import {
   doc,
   updateDoc,
-  arrayUnion,
-  addDoc,
   collection,
   query,
   getDocs,
   where,
   DocumentData,
 } from "firebase/firestore"; // Import arrayUnion
-import { db, storage } from "@/app/firebase"; // Import storage from firebase
+import { db} from "@/app/firebase"; // Import storage from firebase
 import { Paper, Typography, Button, TextField } from "@mui/material";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { getDownloadURL } from "firebase/storage";
 
-//TODO: Test and debug this file
 const page = () => {
   const pathname = usePathname();
   const pathSegments = pathname.split("/"); // Split the pathname into segments
