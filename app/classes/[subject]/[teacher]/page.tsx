@@ -25,6 +25,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { studentData } from "@/utils/data";
+import { generateRandomString } from "@/utils/generateNewUid";
 interface TeacherDetails {
   name: String;
   subject: String;
@@ -117,6 +118,7 @@ const Page = () => {
                 bookings: [
                   ...(userDocData.bookings || []),
                   {
+                    bookingId: generateRandomString(28),
                     date: isoDate,
                     timeSlot: selectedTimeSlot,
                     teacherId: userType === "student" ? teacherId : userUid, // Set teacherId for student and userUid for teacher
@@ -139,6 +141,7 @@ const Page = () => {
                 bookings: [
                   ...(teacherDocData.bookings || []),
                   {
+                    bookingId: generateRandomString(28),
                     date: isoDate,
                     timeSlot: selectedTimeSlot,
                     studentId: userUid,
