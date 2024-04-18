@@ -23,6 +23,7 @@
     "autoprefixer": "10.4.15",
     "axios": "^1.4.0",
     "dayjs": "^1.11.10",
+    "docker": "^0.2.14",
     "firebase": "^10.10.0",
     "formik": "^2.4.3",
     "moment": "^2.29.4",
