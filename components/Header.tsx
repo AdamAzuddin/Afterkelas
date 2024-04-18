@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 
 const Header = () => {
   const pathname = usePathname();
-  console.log("Pathname: ", pathname);
   const { isSidebarOpen } = useAppSelector((state) => state.record);
   return (
     <div

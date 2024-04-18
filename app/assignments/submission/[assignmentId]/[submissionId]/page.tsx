@@ -27,22 +27,28 @@ const page = () => {
   const [mark, setMark] = useState<Number>(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null); // State to hold the selected file
 
-  const fetchSubmission = async (submissionId: string) => {
-    try {
-      const submissionsRef = collection(db, "submissions");
-      const submissionQuerySnapshot = await getDocs(
-        query(
-          submissionsRef,
-          where("uid", "==", submissionId)
-        )
-      );
-      const submission = submissionQuerySnapshot.docs[0].data();
-      setSubmission(submission);
-    } catch (error) {
-      console.error("Error fetching assignment:", error);
-      return null;
+  useEffect(() => {
+    const fetchSubmission = async (submissionId: string) => {
+      try {
+        const submissionsRef = collection(db, "submissions");
+        const submissionQuerySnapshot = await getDocs(
+          query(
+            submissionsRef,
+            where("uid", "==", submissionId)
+          )
+        );
+        const submission = submissionQuerySnapshot.docs[0].data();
+        setSubmission(submission);
+      } catch (error) {
+        console.error("Error fetching assignment:", error);
+        return null;
+      }
+    };
+  
+    return () => {
+      fetchSubmission(submissionId)
     }
-  };
+  }, [submissionId])
 
   const handleReturnSubmission = async () => {
     try {
@@ -63,14 +69,14 @@ const page = () => {
           submissionQuerySnapshot.docs[0].id
         );
         await updateDoc(submissionDocRef, {
-          hasBeenMarked: true,
+          hasBeenGraded: true,
           mark: mark,
           markedFile: fileUrl,
         });
 
         console.log("Submission returned successfully!");
         if (typeof window !== "undefined") {
-          window.location.href = "/assignments/submission";
+          window.history.back();
         }
       } else {
         console.log("Submission not found.");
@@ -90,7 +96,6 @@ const page = () => {
       setSelectedFile(e.target.files[0]);
     }
   };
-  fetchSubmission(submissionId);
   return (
     <Paper elevation={3} style={{ padding: "20px", marginBottom: "10px" }}>
       <div>
@@ -124,7 +129,7 @@ const page = () => {
             variant="outlined"
             style={{ marginBottom: "10px" }}
             onChange={handleChangeGrade}
-            inputProps={{ min: 0 }}
+            inputProps={{ min: 0 , max: 100}}
           />
         </div>
         <div>

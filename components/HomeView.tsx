@@ -8,6 +8,8 @@ import {
   List,
   ListItem,
   ListItemText,
+  Divider,
+  Container,
 } from "@mui/material";
 import {
   getDocs,
@@ -32,9 +34,9 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
         try {
           const classroomsRef = collection(db, "classrooms");
           const querySnapshot = await getDocs(classroomsRef);
-      
+
           const classrooms: string[] = [];
-      
+
           querySnapshot.forEach((doc) => {
             const classroomData = doc.data();
             if (classroomData.students) {
@@ -44,13 +46,13 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
               }
             }
           });
-      
+
           setEnrolledClassrooms(classrooms);
         } catch (error) {
           console.error("Error fetching enrolled classrooms:", error);
         }
       };
-      
+
       const fetchBookings = async () => {
         try {
           const usersRef = collection(db, "users");
@@ -78,33 +80,48 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
     if (enrolledClassrooms.length > 0) {
       const fetchAssignments = async () => {
         try {
-          const assignmentsPromises = enrolledClassrooms.map(async (classroomUid) => {
-            const classroomDocRef = doc(db, "classrooms", classroomUid);
-            const classroomDocSnapshot = await getDoc(classroomDocRef);
-      
-            if (classroomDocSnapshot.exists()) {
-              const classroomData = classroomDocSnapshot.data();
-              const assignments = classroomData ? classroomData.assignments || [] : [];
-      
-              // Filter assignments based on whether they have been submitted or not
-              const filteredAssignments = await Promise.all(assignments.map(async (assignment:any) => {
-                const submissionsRef = collection(db, "submissions");
-                const submissionQuerySnapshot = await getDocs(query(submissionsRef, where("assignmentId", "==", assignment.assignmentId)));
-      
-                if (submissionQuerySnapshot.empty) {
-                  return assignment; // Return assignment if no submission exists for it
-                } else {
-                  return null; // Return null if submission exists
-                }
-              }));
-      
-              return filteredAssignments.filter((assignment) => assignment !== null); // Filter out null assignments
-            } else {
-              console.log(`Classroom with UID ${classroomUid} does not exist.`);
-              return [];
+          const assignmentsPromises = enrolledClassrooms.map(
+            async (classroomUid) => {
+              const classroomDocRef = doc(db, "classrooms", classroomUid);
+              const classroomDocSnapshot = await getDoc(classroomDocRef);
+
+              if (classroomDocSnapshot.exists()) {
+                const classroomData = classroomDocSnapshot.data();
+                const assignments = classroomData
+                  ? classroomData.assignments || []
+                  : [];
+
+                // Filter assignments based on whether they have been submitted or not
+                const filteredAssignments = await Promise.all(
+                  assignments.map(async (assignment: any) => {
+                    const submissionsRef = collection(db, "submissions");
+                    const submissionQuerySnapshot = await getDocs(
+                      query(
+                        submissionsRef,
+                        where("assignmentId", "==", assignment.assignmentId)
+                      )
+                    );
+
+                    if (submissionQuerySnapshot.empty) {
+                      return assignment; // Return assignment if no submission exists for it
+                    } else {
+                      return null; // Return null if submission exists
+                    }
+                  })
+                );
+
+                return filteredAssignments.filter(
+                  (assignment) => assignment !== null
+                ); // Filter out null assignments
+              } else {
+                console.log(
+                  `Classroom with UID ${classroomUid} does not exist.`
+                );
+                return [];
+              }
             }
-          });
-      
+          );
+
           const assignmentsResults = await Promise.all(assignmentsPromises);
           const mergedAssignments = assignmentsResults.flat();
           setAssignments(mergedAssignments);
@@ -112,7 +129,6 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
           console.error("Error fetching assignments:", error);
         }
       };
-      
 
       fetchAssignments();
     }
@@ -126,9 +142,7 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
           <List className="flex mx-5">
             {enrolledClassrooms.map((classroomUid, index) => (
               <ListItem key={index}>
-                <ListItemText
-                  primary={`Classroom UID: ${classroomUid}`}
-                />
+                <ListItemText primary={`Classroom UID: ${classroomUid}`} />
               </ListItem>
             ))}
           </List>
@@ -182,13 +196,85 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
         </div>
       </div>
     );
-  } else if (userType === "teacher" ) {
+  } else if (userType === "teacher") {
     return <div>Hi teacher!</div>;
-  }else if (userType === "admin"){
-    return <div>Hi admin!</div>;
-  } 
-  else {
-    // Display sign-in message with a link to /auth/sign-in
+  } else if (userType === "admin") {
+    return (
+      <Container maxWidth="md" className="mt-8">
+        <Typography variant="h4" gutterBottom>
+          Welcome, Admin!
+        </Typography>
+
+        <div className="mt-6">
+          <Typography variant="h5" gutterBottom>
+            Ongoing Classes
+          </Typography>
+          <List>
+            <ListItem>
+              <ListItemText
+                primary="Mathematics Class"
+                secondary="Teacher: John Doe | Start Time: 10:00 AM | Students: 25"
+              />
+            </ListItem>
+          </List>
+        </div>
+
+        <Divider className="my-6" />
+
+        <div className="mt-6">
+          <Typography variant="h5" gutterBottom>
+            Upcoming Classes
+          </Typography>
+          <List>
+            <ListItem>
+              <ListItemText
+                primary="History Class"
+                secondary="Teacher: Alice Johnson | Start Time: 2:00 PM | Duration: 1 hour"
+              />
+            </ListItem>
+          </List>
+        </div>
+
+        <Divider className="my-6" />
+
+        <div className="mt-6">
+          <Typography variant="h5" gutterBottom>
+            User Management
+          </Typography>
+          {/* Add user management options */}
+        </div>
+
+        <Divider className="my-6" />
+
+        <div className="mt-6">
+          <Typography variant="h5" gutterBottom>
+            Content Management
+          </Typography>
+          {/* Add content management options */}
+        </div>
+
+        <Divider className="my-6" />
+
+        <div className="mt-6">
+          <Typography variant="h5" gutterBottom>
+            Announcements and Notifications
+          </Typography>
+          {/* Add announcements and notifications options */}
+        </div>
+
+        <Divider className="my-6" />
+
+        <div className="mt-6">
+          <Typography variant="h5" gutterBottom>
+            Settings
+          </Typography>
+          {/* Add settings options */}
+        </div>
+
+        <Divider className="my-6" />
+      </Container>
+    );
+  } else {
     return (
       <div>
         <Typography variant="body1">Please sign in</Typography>

@@ -165,15 +165,15 @@ const SignUp = () => {
                 label="Subject"
               >
                 <MenuItem value="">Select subject</MenuItem>
-                <MenuItem value="NDCF4f4hEvGX5VtjBzC1">Physics</MenuItem>
-                <MenuItem value="qqrbQeX4orX9U1DhLj5B">Chemistry</MenuItem>
-                <MenuItem value="TNc5OGszjM1cdzaHysqU">Biology</MenuItem>
-                <MenuItem value="JkzkikzO2aOGj7fd9wDx">Mathematics</MenuItem>
-                <MenuItem value="d9r6S8iuIHALb92Awnr6">
+                <MenuItem value="physics">Physics</MenuItem>
+                <MenuItem value="chemistry">Chemistry</MenuItem>
+                <MenuItem value="biology">Biology</MenuItem>
+                <MenuItem value="math">Mathematics</MenuItem>
+                <MenuItem value="add-math">
                   Additional Mathematics
                 </MenuItem>
-                <MenuItem value="ThTULvhwyMVZTCRG3koz">Accounting</MenuItem>
-                <MenuItem value="v6NsTeqVrupKWa1ccOtD">Economics</MenuItem>
+                <MenuItem value="accounting">Accounting</MenuItem>
+                <MenuItem value="econs">Economics</MenuItem>
               </Select>
             </FormControl>
           )}

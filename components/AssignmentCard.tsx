@@ -11,7 +11,6 @@ interface AssignmentItemProps {
   }
 
 const AssignmentCard:React.FC<AssignmentItemProps> = ({ assignment,userType }) => {
-  console.log("User type: " + userType);
   const { assignmentId, title, dueDate, description, file } = assignment;
   let buttonRef = "";
   let buttonText = "";

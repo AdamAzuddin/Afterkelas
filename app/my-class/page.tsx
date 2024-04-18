@@ -76,8 +76,6 @@ const MyClassPage: React.FC = () => {
     };
   }, [user]);
 
-  console.log(assignments);
-
   return (
     <Container maxWidth="lg">
       <Typography variant="h3" gutterBottom>

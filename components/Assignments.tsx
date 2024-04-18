@@ -168,8 +168,6 @@ const Assignments: React.FC<HeaderProps> = ({ userType, uid }) => {
     }
   }, [enrolledClassrooms]);
 
-  console.log("My classroom", myClassroom)
-
   if (userType === "student") {
     return (
       <div>
