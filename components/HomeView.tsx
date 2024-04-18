@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { HeaderProps } from "@/utils/interface";
-import Link from "next/link";
 import {
   Button,
   Typography,

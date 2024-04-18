@@ -60,6 +60,7 @@ export interface BookingProps{
   timeSlot: string,
   studentId: string,
   studentName: string,
+  teacherName: string
 }
 
 export interface UserDetails {

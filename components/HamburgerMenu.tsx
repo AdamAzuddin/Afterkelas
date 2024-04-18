@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
@@ -11,12 +11,7 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useLocation, Link } from "react-router-dom";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import {
-  getDocs,
-  query,
-  collection,
-  where,
-} from "firebase/firestore";
+import { getDocs, query, collection, where } from "firebase/firestore";
 import { db } from "../app/firebase"; // Adjust the path as per your project structure
 import { UserDetails } from "@/utils/interface";
 
@@ -24,7 +19,6 @@ interface LinkItem {
   text: string;
   path: string;
 }
-
 
 const HamburgerMenu: React.FC = () => {
   const [open, setOpen] = React.useState(false);
@@ -74,11 +68,13 @@ const HamburgerMenu: React.FC = () => {
         student: [
           { text: "Home", path: "/" },
           { text: "Classes", path: "/classes" },
+          { text: "Bookings", path: "/bookings" },
           { text: "Assignments", path: "/assignments" },
         ],
         teacher: [
           { text: "Home", path: "/" },
           { text: "My class", path: "/my-class" },
+          { text: "Bookings", path: "/bookings" },
           { text: "Assignments", path: "/assignments" },
         ],
         admin: [
@@ -118,7 +114,9 @@ const HamburgerMenu: React.FC = () => {
   );
 
   const handleLinkClick = (path: string) => {
-    if (typeof window !== "undefined") {window.location.reload();}
+    if (typeof window !== "undefined") {
+      window.location.reload();
+    }
   };
 
   return (
