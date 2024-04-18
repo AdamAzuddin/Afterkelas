@@ -11,9 +11,7 @@ import {
   ListItemText,
   Button,
 } from "@mui/material";
-import BookingDetails from "@/components/BookingDetails";
-import Link from "next/link";
-//TODO: Setup this page
+
 const page = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userUid, setuserUid] = useState<string>();
