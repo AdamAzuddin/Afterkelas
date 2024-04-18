@@ -24,7 +24,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { SelectChangeEvent } from "@mui/material/Select";
-import { studentData } from "@/utils/data";
 import { generateRandomString } from "@/utils/generateNewUid";
 interface TeacherDetails {
   name: String;
@@ -124,6 +123,7 @@ const Page = () => {
                     teacherId: userType === "student" ? teacherId : userUid, // Set teacherId for student and userUid for teacher
                     teacherName: teacherName, //
                     studentId: userType === "student" ? userUid : teacherId, // Set studentId for teacher and userUid for student
+                    hasBeenCompleted: false,
                   },
                 ],
               });
@@ -146,6 +146,7 @@ const Page = () => {
                     timeSlot: selectedTimeSlot,
                     studentId: userUid,
                     studentName: userName, // Add student name to the booking
+                    hasBeenCompleted: false,
                   },
                 ],
               });
