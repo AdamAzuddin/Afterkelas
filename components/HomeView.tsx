@@ -21,6 +21,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../app/firebase";
 import { Assignment } from "@/utils/interface";
+import PleaseSignIn from "./PleaseSignIn";
 
 const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
   const [enrolledClassrooms, setEnrolledClassrooms] = useState<string[]>([]);
@@ -276,14 +277,7 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
     );
   } else {
     return (
-      <div>
-        <Typography variant="body1">Please sign in</Typography>
-        <Link href={"/auth/sign-in"} passHref>
-          <Button variant="contained" color="primary">
-            Sign In
-          </Button>
-        </Link>
-      </div>
+      <PleaseSignIn/>
     );
   }
 };
