@@ -27,22 +27,31 @@ const page = () => {
   const [mark, setMark] = useState<Number>(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null); // State to hold the selected file
 
-  const fetchSubmission = async (submissionId: string) => {
-    try {
-      const submissionsRef = collection(db, "submissions");
-      const submissionQuerySnapshot = await getDocs(
-        query(
-          submissionsRef,
-          where("uid", "==", submissionId)
-        )
-      );
-      const submission = submissionQuerySnapshot.docs[0].data();
-      setSubmission(submission);
-    } catch (error) {
-      console.error("Error fetching assignment:", error);
-      return null;
+  useEffect(() => {
+    const fetchSubmission = async (submissionId: string) => {
+      try {
+        const submissionsRef = collection(db, "submissions");
+        const submissionQuerySnapshot = await getDocs(
+          query(
+            submissionsRef,
+            where("uid", "==", submissionId)
+          )
+        );
+        const submission = submissionQuerySnapshot.docs[0].data();
+        setSubmission(submission);
+      } catch (error) {
+        console.error("Error fetching assignment:", error);
+        return null;
+      }
+    };
+  
+    return () => {
+      fetchSubmission(submissionId)
     }
-  };
+  }, [submissionId])
+  
+
+  
 
   const handleReturnSubmission = async () => {
     try {
@@ -90,7 +99,6 @@ const page = () => {
       setSelectedFile(e.target.files[0]);
     }
   };
-  fetchSubmission(submissionId);
   return (
     <Paper elevation={3} style={{ padding: "20px", marginBottom: "10px" }}>
       <div>

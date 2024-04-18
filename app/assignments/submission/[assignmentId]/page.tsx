@@ -22,44 +22,47 @@ const page = () => {
   const assignmentId = pathSegments[pathSegments.length - 1]; // Access the last segment
   const [submissions, setSubmissions] = useState<Submission[]>([]);
 
-  const fetchSubmissions = async (assignmentId: string) => {
-    try {
-      // Find the classroom that contains the assignment with the given ID
-      const submissionsRef = collection(db, "submissions");
-      const submissionQuerySnapshot = await getDocs(
-        query(
-          submissionsRef,
-          where("assignmentId", "==", assignmentId),
-          where("hasBeenMarked", "==", false)
-        )
-      );
+  useEffect(() => {
+    const fetchSubmissions = async (assignmentId: string) => {
+      try {
+        // Find the classroom that contains the assignment with the given ID
+        const submissionsRef = collection(db, "submissions");
+        const submissionQuerySnapshot = await getDocs(
+          query(
+            submissionsRef,
+            where("assignmentId", "==", assignmentId),
+            where("hasBeenMarked", "==", false)
+          )
+        );
 
-      // Create an array to store the submissions
-      const newSubmissions: Submission[] = [];
+        // Create an array to store the submissions
+        const newSubmissions: Submission[] = [];
 
-      // Iterate through the submissionQuerySnapshot
-      submissionQuerySnapshot.forEach((doc) => {
-        // Get the data of each submission
-        const submissionData = doc.data();
-        // Push the submission data into the newSubmissions array
-        newSubmissions.push(submissionData as Submission);
-      });
+        // Iterate through the submissionQuerySnapshot
+        submissionQuerySnapshot.forEach((doc) => {
+          // Get the data of each submission
+          const submissionData = doc.data();
+          // Push the submission data into the newSubmissions array
+          newSubmissions.push(submissionData as Submission);
+        });
 
-      // Update the state with the newSubmissions array
-      setSubmissions(newSubmissions);
+        // Update the state with the newSubmissions array
+        setSubmissions(newSubmissions);
+        // Get the number of submissions
+        const numberOfSubmissions = submissionQuerySnapshot.size;
 
-      // Log the number of submissions
-      console.log("Number of submissions:", newSubmissions.length);
-      // Get the number of submissions
-      const numberOfSubmissions = submissionQuerySnapshot.size;
+        console.log("Number of submissions:", numberOfSubmissions);
+      } catch (error) {
+        console.error("Error fetching assignment:", error);
+        return null;
+      }
+    };
 
-      console.log("Number of submissions:", numberOfSubmissions);
-    } catch (error) {
-      console.error("Error fetching assignment:", error);
-      return null;
-    }
-  };
-  fetchSubmissions(assignmentId);
+    return () => {
+      fetchSubmissions(assignmentId);
+    };
+  }, [assignmentId]);
+
   return (
     <div>
       {submissions.map((submission, index) => (
