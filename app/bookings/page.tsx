@@ -3,13 +3,16 @@ import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { getDocs, query, collection, where } from "firebase/firestore";
 import { db } from "@/app/firebase"; // Adjust the path as per your project structure
-import {UserDetails } from "@/utils/interface";
+import { UserDetails } from "@/utils/interface";
 import {
   Typography,
   List,
   ListItem,
   ListItemText,
+  Button,
 } from "@mui/material";
+import BookingDetails from "@/components/BookingDetails";
+import Link from "next/link";
 //TODO: Setup this page
 const page = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -39,7 +42,6 @@ const page = () => {
             const userData = querySnapshot.docs[0].data() as UserDetails; // Cast to UserDetails
             setUserType(userData.userType);
             setuserUid(userData.uid);
-            
           } else {
             console.log("No user document found with the provided uid.");
           }
@@ -63,12 +65,12 @@ const page = () => {
           console.log("User UID is not available.");
           return;
         }
-        
+
         const usersRef = collection(db, "users");
         const querySnapshot = await getDocs(
           query(usersRef, where("uid", "==", userUid))
         );
-  
+
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data();
           setBookings(userData.bookings || []);
@@ -79,10 +81,9 @@ const page = () => {
         console.error("Error fetching bookings:", error);
       }
     };
-  
+
     fetchBookings();
   }, [userUid]);
-  
 
   return (
     <div>
@@ -92,14 +93,28 @@ const page = () => {
           <List>
             {bookings.map((booking: any, index: any) => (
               <ListItem key={index}>
-                {userType=="teacher" && <ListItemText
-                  primary={`Date: ${booking.date}, Time Slot: ${booking.timeSlot}`}
-                  secondary={`With student: ${booking.studentName}`}
-                />}
-                {userType=="student" && <ListItemText
-                  primary={`Date: ${booking.date}, Time Slot: ${booking.timeSlot}`}
-                  secondary={`With Teacher: ${booking.teacherName}`}
-                />}
+                {userType == "teacher" && (
+                  <div>
+                    <ListItemText
+                      primary={`Date: ${booking.date}, Time Slot: ${booking.timeSlot}, Booking Id: ${booking.bookingId}`}
+                      secondary={`With student: ${booking.studentName}`}
+                    />
+                    <Button href={`/bookings/${booking.bookingId}`}>
+                      View my booking
+                    </Button>
+                  </div>
+                )}
+                {userType == "student" && (
+                  <div>
+                    <ListItemText
+                      primary={`Date: ${booking.date}, Time Slot: ${booking.timeSlot}, Booking Id: ${booking.bookingId}`}
+                      secondary={`With Teacher: ${booking.teacherName}`}
+                    />
+                    <Button href={`/bookings/${booking.bookingId}`}>
+                      View my booking
+                    </Button>
+                  </div>
+                )}
               </ListItem>
             ))}
           </List>

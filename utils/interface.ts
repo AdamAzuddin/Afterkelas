@@ -56,6 +56,7 @@ export interface IIProps {
 }
 
 export interface BookingProps{
+  bookingId: string;
   date: string,
   timeSlot: string,
   studentId: string,
