@@ -75,8 +75,6 @@ const Page = () => {
       // Format the selected date in ISO 8601 format
       const isoDate = selectedDateTime.format("YYYY-MM-DD");
 
-      console.log("Booking submitted:", isoDate);
-
       try {
         const auth = getAuth();
         const user = auth.currentUser;
@@ -114,8 +112,6 @@ const Page = () => {
 
             if (!teacherQuerySnapshot.empty) {
               const teacherDoc = teacherQuerySnapshot.docs[0];
-              const teacherDocData = teacherDoc.data();
-              console.log("Teacher Name: " + teacherName)
               // Update user document
               await updateDoc(userDoc.ref, {
                 bookings: [
