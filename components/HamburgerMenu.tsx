@@ -78,7 +78,7 @@ const HamburgerMenu: React.FC = () => {
           { text: "Assignments", path: "/assignments" },
         ],
         admin: [
-          { text: "Home", path: "/admin" },
+          { text: "Home", path: "/" },
           { text: "Manage Users", path: "/admin/manage-users" },
           { text: "Attendance", path: "/admin/attendance" },
           { text: "Analytics", path: "/admin/analytics" },
