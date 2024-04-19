@@ -19,7 +19,7 @@ const Page: React.FC<any> = () => {
   const [generatedSheet, setGeneratedSheet] = useState<any>("");
   const [error, setError] = useState<any>("");
 
-  //TODO(Dev 1 Team Teacher): complete this function, return a pdf file in form of url. Tips: checkout /assignments/assignment to see how we change file to url
+  //TODO(Amir Hakim): complete this function, return a pdf file in form of url. Tips: checkout /assignments/assignment to see how we change file to url
   const convertStringsToPdf = () =>{
 
   }
