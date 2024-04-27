@@ -72,7 +72,8 @@ Add collections and documents as shown below:
 
 ### 6. Configure Firebase Environment Variables
 1. In the project's root directory in VS Code, create a new file named .env.local.
-2. Copy and paste the following into .env.local, replacing placeholders with your Firebase project settings (you can see this by going to you firebase project console, project overview>project settings>General. You should see code that look something like this
+2. Copy and paste the following into .env.local, replacing placeholders with your Firebase project settings
+(you can see this by going to you firebase project console, project overview>project settings>General. You should see code that look something like this
 ```javascript
 const firebaseConfig = {
   apiKey: YOUR_API_KEY,
@@ -82,6 +83,7 @@ const firebaseConfig = {
 
 ```
 ):
+
 ```
 // .env.local
 NEXT_PUBLIC_FIREBASE_API_KEY=YOUR_API_KEY
