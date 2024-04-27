@@ -51,7 +51,7 @@ This is a web application built with Next.js that allows teachers and students t
 npm install
 ```
 
-###4. Run the Project Locally
+### 4. Run the Project Locally
 1. After installing dependencies, run the development server:
 ```bash
 npm run dev
@@ -59,12 +59,35 @@ npm run dev
 
 2. Open a web browser and navigate to localhost:3000 to view the project.
 
-###. Setting Up Firebase
+### 5. Setting Up Firebase
 1.If you don't have a Firebase account, create one at firebase.google.com. 
 2. Go to the Firebase console and create a new project named "Afterkelas" with default settings.
 3. In the Firebase console, set up Firestore:
-Add collections and documents as shown in the provided screenshot.
-Enable Email/Password authentication in Firebase Auth.
+Add collections and documents as shown below:
+
+![screenshot](screenshots/firestore_database.png)
+
+4. Enable Email/Password authentication in Firebase Auth.
+
+### 6. Configure Firebase Environment Variables
+1. In the project's root directory in VS Code, create a new file named .env.local.
+2. Copy and paste the following into .env.local, replacing placeholders with your Firebase project settings:
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=YOUR_API_KEY
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=YOUR_AUTH_DOMAIN
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=YOUR_STORAGE_BUCKET
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=YOUR_MESSAGING_SENDER_ID
+NEXT_PUBLIC_FIREBASE_APP_ID=YOUR_APP_ID
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=YOUR_MEASUREMENT_ID
+
+```
+
+### 7. Connect Firebase to the Project
+1. Replace the placeholders in the .env.local file with your actual Firebase project settings.
+2. Save the changes.
+3. Refresh localhost:3000 in your web browser to view the updated project with Firebase integration.
+
 ## Usage
 
 1. Start the application:
@@ -74,7 +97,7 @@ npm run dev
 
 2. Open your web browser and navigate to http://localhost:3000.
 
-3. Use the application to input and view teacher and student details.
+3. Use the application to see changes you made in code reflected on the browser. If no changes is applied when you edit the code, make sure autosave is turned on in VS Code. You can do this by going to top left and click on File, and make sure there's a click next to the Autosave text, if not click on it and the tick will appear.
 
 ## API Usage
 
