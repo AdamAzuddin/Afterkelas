@@ -37,15 +37,16 @@ This is a web application built with Next.js that allows teachers and students t
 
 1. Open Visual Studio Code (VS Code).
 2. In VS Code, go to Source Control (`Ctrl + Shift + G`).
-3. Click on "Clone Repository".
-4. Paste the copied repository link and choose a local directory to clone the project into.
+3. If you haven't installed git, please do so from [git-scm.com/](https://git-scm.com/downloads)
+4. Click on "Clone Repository".
+5. Paste the copied repository link and choose a local directory to clone the project into.
 
 ### 3. Install Node.js and Required Dependencies
 
 1. Ensure you have Node.js installed on your system. You can download it from [nodejs.org](https://nodejs.org/).
 2. Open a terminal in VS Code or any terminal of your choice.
 3. Navigate to the project directory.
-4. Run the following command on the terminal (you can use keyboard shortcut ctrl + ` to access it) to install project dependencies:
+4. Run the following command on the terminal (you can use keyboard shortcut `ctrl + ~ `to access it) to install project dependencies:
 
 ```bash
 npm install
@@ -71,8 +72,18 @@ Add collections and documents as shown below:
 
 ### 6. Configure Firebase Environment Variables
 1. In the project's root directory in VS Code, create a new file named .env.local.
-2. Copy and paste the following into .env.local, replacing placeholders with your Firebase project settings:
+2. Copy and paste the following into .env.local, replacing placeholders with your Firebase project settings (you can see this by going to you firebase project console, project overview>project settings>General. You should see code that look something like this
+```javascript
+const firebaseConfig = {
+  apiKey: YOUR_API_KEY,
+  authDomain: YOUR_AUTH_DOMAIN,
+  ....
+};
+
 ```
+):
+```
+// .env.local
 NEXT_PUBLIC_FIREBASE_API_KEY=YOUR_API_KEY
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=YOUR_AUTH_DOMAIN
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
