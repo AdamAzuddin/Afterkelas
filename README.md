@@ -31,7 +31,7 @@ This is a web application built with Next.js that allows teachers and students t
 ### 1. Fork and Clone the Repository
 
 - Fork the repository on GitHub by clicking the "Fork" button.
-- Copy the HTTPS or SSH link of your forked repository.
+- Copy the HTTPS link of your forked repository.
 
 ### 2. Clone the Repository Locally
 
