@@ -25,25 +25,46 @@ This is a web application built with Next.js that allows teachers and students t
 - Typescript
 - Next.js
 
-## Installation
 
-1. Clone the repository:
+## Setup Instructions
 
-```bash
-git clone https://github.com/AdamAzuddin/Afterkelas.git
-```
+### 1. Fork and Clone the Repository
 
-2. Navigate to the project directory:
-```bash
-cd Afterkelas
+- Fork the repository on GitHub by clicking the "Fork" button.
+- Copy the HTTPS or SSH link of your forked repository.
 
-```
+### 2. Clone the Repository Locally
 
-3. Install dependencies:
+1. Open Visual Studio Code (VS Code).
+2. In VS Code, go to Source Control (`Ctrl + Shift + G`).
+3. Click on "Clone Repository".
+4. Paste the copied repository link and choose a local directory to clone the project into.
+
+### 3. Install Node.js and Required Dependencies
+
+1. Ensure you have Node.js installed on your system. You can download it from [nodejs.org](https://nodejs.org/).
+2. Open a terminal in VS Code or any terminal of your choice.
+3. Navigate to the project directory.
+4. Run the following command on the terminal (you can use keyboard shortcut ctrl + ` to access it) to install project dependencies:
+
 ```bash
 npm install
 ```
 
+###4. Run the Project Locally
+1. After installing dependencies, run the development server:
+```bash
+npm run dev
+```
+
+2. Open a web browser and navigate to localhost:3000 to view the project.
+
+###. Setting Up Firebase
+1.If you don't have a Firebase account, create one at firebase.google.com. 
+2. Go to the Firebase console and create a new project named "Afterkelas" with default settings.
+3. In the Firebase console, set up Firestore:
+Add collections and documents as shown in the provided screenshot.
+Enable Email/Password authentication in Firebase Auth.
 ## Usage
 
 1. Start the application:
