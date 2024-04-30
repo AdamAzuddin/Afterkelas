@@ -1,47 +1,58 @@
 "use client";
 
 import { Header, HomeView, SideLayout } from "@/components";
-import { saveTeacherData } from "@/redux/features/records/recordSlice";
-import { useAppDispatch } from "@/redux/hook";
-import { teacherData } from "@/utils/data";
-import {
-  getTeacherLocalStorage,
-  saveTeacherLocalStorage,
-} from "@/utils/getLocalStorage";
-import { TeacherPropsWithId } from "@/utils/interface";
+import React from "react";
 import { useEffect } from "react";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { getDocs, query, collection, where } from "firebase/firestore";
+import { db } from "../app/firebase"; // Adjust the path as per your project structure
+import { UserDetails } from "@/utils/interface";
 
 const Home = () => {
-  const dispatch = useAppDispatch();
-
-  const loadData = async () => {
-    try {
-      const response = await fetch("/api/record");
-      const resp = await response.json();
-      if (resp) {
-        let value = getTeacherLocalStorage().data;
-        if (value && Array.isArray(value) && value.length > 0) {
-          let teacherData = value as TeacherPropsWithId[];
-          dispatch(saveTeacherData(teacherData));
-        } else {
-          let val = teacherData as TeacherPropsWithId[];
-          saveTeacherLocalStorage(val);
-          dispatch(saveTeacherData(teacherData));
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [user, setUser] = React.useState<User | null>(null);
+  const [userType, setUserType] = React.useState<string | null>(null);
 
   useEffect(() => {
-    loadData();
+    const auth = getAuth();
+
+    const unsubscribe = onAuthStateChanged(auth, async (user: User | null) => {
+      setUser(user);
+      if (user) {
+        try {
+          if (!db) {
+            console.error("Firebase is not initialized.");
+            return;
+          }
+
+          const usersRef = collection(db, "users");
+          const querySnapshot = await getDocs(
+            query(usersRef, where("uid", "==", user.uid))
+          );
+
+          if (!querySnapshot.empty) {
+            // Assuming there's only one document with the given uid
+            const userData = querySnapshot.docs[0].data() as UserDetails; // Cast to UserDetails
+            setUserType(userData.userType);
+          } else {
+            console.log("No user document found with the provided uid.");
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      } else {
+        setUserType(null); // Reset userType if no user is signed in
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
   return (
     <SideLayout>
-      <Header type="teacher" />
-      <HomeView type="teacher" />
+      <HomeView userType={userType} uid={user?.uid} />
     </SideLayout>
   );
 };
+
 export default Home;

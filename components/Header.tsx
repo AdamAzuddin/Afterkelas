@@ -1,34 +1,35 @@
 "use client";
-import Link from "next/link";
 import dashboardSvg from "@/assets/dashboard.svg";
-import arrowRightSvg from "@/assets/arrowRight.svg";
-import { HeaderProps } from "@/utils/interface";
+import book from "@/assets/book.svg";
 import Image from "next/image";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { useRouter } from "next/navigation";
-import { setLoader } from "@/redux/features/records/recordSlice";
+import { useAppSelector } from "@/redux/hook";
+import { usePathname } from "next/navigation";
 
-const Header = ({ type }: HeaderProps) => {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
+const Header = () => {
+  const pathname = usePathname();
   const { isSidebarOpen } = useAppSelector((state) => state.record);
   return (
     <div
-      className={`flex flex-wrap justify-between items-center mt-5 py-5 ${
-        !isSidebarOpen ? "mx-6" : "mx-1"
-      }`}
+      className={`flex flex-wrap justify-between items-center mt-2 py-5 `}
     >
       <div
         className={`mb-2 flex justify-start items-center ${
           !isSidebarOpen ? "ml-[1em]" : "ml-0"
         }`}
       >
-        <Image
-          priority
-          src={dashboardSvg}
-          alt="dashboard"
-          className="w-[20px] h-[20px]"
-        />
+        {pathname === "/" && (
+          <Image
+            priority
+            src={dashboardSvg}
+            alt="dashboard"
+            className="w-[30px] h-[30px]"
+          />
+        )}
+        {(pathname === "/classes" || pathname === "/my-class" || pathname === "/assignments") && (
+          <Image src={book} alt="Books" className="w-[30px] h-[30px]" />
+        )}
+
+        {/* use to display for admin later
         <Image
           priority
           src={arrowRightSvg}
@@ -41,9 +42,9 @@ const Header = ({ type }: HeaderProps) => {
             : type === "student"
             ? "All Students Record"
             : type}
-        </h3>
+        </h3>  */}
       </div>
-      {type === "teacher" || type === "student" ? (
+      {/* {type === "teacher" || type === "student" ? (
         <div className="flex justify-center ">
           <Link
             href={`/create-form/${type === "teacher" ? "teacher" : "student"}`}
@@ -75,7 +76,7 @@ const Header = ({ type }: HeaderProps) => {
             Go back
           </h3>
         </button>
-      )}
+      )} */}
     </div>
   );
 };

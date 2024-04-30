@@ -24,8 +24,10 @@ const SideLayout = ({ children }: ChildrenProps) => {
 
   useEffect(() => {
     checkWidth();
-    window.addEventListener("resize", checkWidth);
-    return () => window.removeEventListener("resize", checkWidth);
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", checkWidth);
+      return () => window.removeEventListener("resize", checkWidth);
+    }
   }, [screenSize]);
   return <div className="main-container">{children}</div>;
 };

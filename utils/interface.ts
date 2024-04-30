@@ -30,7 +30,8 @@ export interface AdminPropsWithId extends AdminProps {
 }
 
 export interface HeaderProps {
-  type: string;
+  userType: string | null | undefined;
+  uid: string | undefined | null;
 }
 
 export type StudentProps = {
@@ -52,4 +53,47 @@ export interface IIProps {
   studentData: Array<StudentProps>;
   adminData: Array<AdminProps>;
   searchTerm: string;
+}
+
+export interface BookingProps{
+  bookingId: string;
+  date: string,
+  timeSlot: string,
+  studentId: string,
+  studentName: string,
+  teacherName: string
+}
+
+export interface UserDetails {
+  email: string;
+  uid: string;
+  userType: string;
+  name: string;
+  bookings: Array<BookingProps>;
+}
+
+export interface Classroom {
+  uid: string;
+  teacher: string;
+  subject: string;
+  students: string[]; 
+  assignments: []
+}
+
+export interface Assignment {
+  assignmentId: string;
+  title: string;
+  dueDate: string;
+  description?: string;
+  file?: string;
+}
+
+export interface Submission {
+  uid: string;
+  studentId: string | undefined | null;
+  assignmentId: string;
+  file: string | undefined | null;
+  hasBeenGraded: boolean;
+  mark: Number | undefined;
+  markedFile:string | undefined | null; 
 }

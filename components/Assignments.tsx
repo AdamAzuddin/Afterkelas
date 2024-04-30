@@ -1,14 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { HeaderProps } from "@/utils/interface";
+import Link from "next/link";
 import {
   Button,
   Typography,
   List,
   ListItem,
   ListItemText,
-  Divider,
-  Container,
 } from "@mui/material";
 import {
   getDocs,
@@ -20,11 +19,16 @@ import {
 } from "firebase/firestore";
 import { db } from "../app/firebase";
 import { Assignment } from "@/utils/interface";
-import PleaseSignIn from "./PleaseSignIn";
+import AssignmentCard from "./AssignmentCard";
+import { Classroom } from "@/utils/interface";
 
-const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
+const Assignments: React.FC<HeaderProps> = ({ userType, uid }) => {
+  const [myClassroom, setMyClassroom] = useState<Classroom>();
   const [enrolledClassrooms, setEnrolledClassrooms] = useState<string[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [assignmentsForMyClass, setAssignmentsForMyClass] = useState<
+    Assignment[]
+  >([]);
 
   const [bookings, setBookings] = useState<any[]>([]); // State to store bookings
 
@@ -73,6 +77,36 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
 
       fetchEnrolledClassrooms();
       fetchBookings();
+    } else if (userType == "teacher" && uid) {
+      const getMyClass = async () => {
+        
+        try {
+          if (!db) {
+            console.error("Firebase is not initialized.");
+            return;
+          }
+
+          const classroomRef = collection(db, "classrooms");
+
+          const querySnapshot = await getDocs(
+            query(classroomRef, where("teacher", "==", uid))
+          );
+
+          if (!querySnapshot.empty) {
+            const classroomData = querySnapshot.docs[0].data() as Classroom;
+
+            setMyClassroom(classroomData);
+            setAssignments(classroomData.assignments);
+          } else {
+            console.log(
+              "No classroom document found with the provided teacher reference."
+            );
+          }
+        } catch (error) {
+          console.error("Error fetching classroom data:", error);
+        }
+      };
+      getMyClass()
     }
   }, [uid, userType]);
 
@@ -137,57 +171,12 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
   if (userType === "student") {
     return (
       <div>
-        <Typography variant="h4">Your Classrooms</Typography>
-        {enrolledClassrooms.length > 0 ? (
-          <List className="flex mx-5">
-            {enrolledClassrooms.map((classroomUid, index) => (
-              <ListItem key={index}>
-                <ListItemText primary={`Classroom UID: ${classroomUid}`} />
-              </ListItem>
-            ))}
-          </List>
-        ) : (
-          <div>
-            <Typography variant="body1">
-              You're not a part of any classroom. Would you like to join one?
-            </Typography>
-          </div>
-        )}
-
-        <div style={{ marginTop: "20px" }}>
-          <Typography variant="h4">Upcoming Tutoring Sessions:</Typography>
-          {bookings.length > 0 ? (
-            <List>
-              {bookings.map((booking, index) => (
-                <ListItem key={index}>
-                  <ListItemText
-                    primary={`Date: ${booking.date}, Time Slot: ${booking.timeSlot}`}
-                    secondary={`With Teacher: ${booking.teacherName}`}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          ) : (
-            <Typography variant="body1">No bookings available</Typography>
-          )}
-        </div>
-
         <div>
           <Typography variant="h4">Your Assignments</Typography>
           {assignments.length > 0 ? (
-            <List className="mx-5">
+            <List>
               {assignments.map((assignment, index) => (
-                <ListItem key={index}>
-                  <ListItemText
-                    primary={`Title: ${assignment.title}`}
-                    secondary={`Due Date: ${assignment.dueDate}`}
-                  />
-                  {assignment.description && (
-                    <ListItemText
-                      primary={`Description: ${assignment.description}`}
-                    />
-                  )}
-                </ListItem>
+                <AssignmentCard key={index} assignment={assignment} userType={userType}/>
               ))}
             </List>
           ) : (
@@ -196,89 +185,34 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
         </div>
       </div>
     );
-  } else if (userType === "teacher") {
-    return <div>Hi teacher!</div>;
-  } else if (userType === "admin") {
+  } else if (userType === "teacher" || userType === "admin") {
     return (
-      <Container maxWidth="md" className="mt-8">
-        <Typography variant="h4" gutterBottom>
-          Welcome, Admin!
-        </Typography>
-
-        <div className="mt-6">
-          <Typography variant="h5" gutterBottom>
-            Ongoing Classes
-          </Typography>
-          <List>
-            <ListItem>
-              <ListItemText
-                primary="Mathematics Class"
-                secondary="Teacher: John Doe | Start Time: 10:00 AM | Students: 25"
-              />
-            </ListItem>
-          </List>
-        </div>
-
-        <Divider className="my-6" />
-
-        <div className="mt-6">
-          <Typography variant="h5" gutterBottom>
-            Upcoming Classes
-          </Typography>
-          <List>
-            <ListItem>
-              <ListItemText
-                primary="History Class"
-                secondary="Teacher: Alice Johnson | Start Time: 2:00 PM | Duration: 1 hour"
-              />
-            </ListItem>
-          </List>
-        </div>
-
-        <Divider className="my-6" />
-
-        <div className="mt-6">
-          <Typography variant="h5" gutterBottom>
-            User Management
-          </Typography>
-          {/* Add user management options */}
-        </div>
-
-        <Divider className="my-6" />
-
-        <div className="mt-6">
-          <Typography variant="h5" gutterBottom>
-            Content Management
-          </Typography>
-          {/* Add content management options */}
-        </div>
-
-        <Divider className="my-6" />
-
-        <div className="mt-6">
-          <Typography variant="h5" gutterBottom>
-            Announcements and Notifications
-          </Typography>
-          {/* Add announcements and notifications options */}
-        </div>
-
-        <Divider className="my-6" />
-
-        <div className="mt-6">
-          <Typography variant="h5" gutterBottom>
-            Settings
-          </Typography>
-          {/* Add settings options */}
-        </div>
-
-        <Divider className="my-6" />
-      </Container>
+      <div>
+        Assignment from my class
+        {assignments.length > 0 ? (
+            <List>
+              {assignments.map((assignment, index) => (
+                <AssignmentCard key={index} assignment={assignment} userType={userType}/>
+              ))}
+            </List>
+          ) : (
+            <Typography variant="body1">No assignments available</Typography>
+          )}
+      </div>
     );
   } else {
+    // Display sign-in message with a link to /auth/sign-in
     return (
-      <PleaseSignIn/>
+      <div>
+        <Typography variant="body1">Please sign in</Typography>
+        <Link href={"/auth/sign-in"} passHref>
+          <Button variant="contained" color="primary">
+            Sign In
+          </Button>
+        </Link>
+      </div>
     );
   }
 };
 
-export default HomeView;
+export default Assignments;
