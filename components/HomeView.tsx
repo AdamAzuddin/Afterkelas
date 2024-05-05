@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { HeaderProps } from "@/utils/interface";
 import {
-  Button,
   Typography,
   List,
   ListItem,
@@ -235,26 +234,7 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
           </List>
         </div>
 
-        <Divider className="my-6" />
-
-        <div className="mt-6">
-          <Typography variant="h5" gutterBottom>
-            User Management
-          </Typography>
-          {/* Add user management options */}
-        </div>
-
-        <Divider className="my-6" />
-
-        <div className="mt-6">
-          <Typography variant="h5" gutterBottom>
-            Content Management
-          </Typography>
-          {/* Add content management options */}
-        </div>
-
-        <Divider className="my-6" />
-
+        <Divider className="my-6" /> 
         <div className="mt-6">
           <Typography variant="h5" gutterBottom>
             Announcements and Notifications
@@ -264,14 +244,6 @@ const HomeView: React.FC<HeaderProps> = ({ userType, uid }) => {
 
         <Divider className="my-6" />
 
-        <div className="mt-6">
-          <Typography variant="h5" gutterBottom>
-            Settings
-          </Typography>
-          {/* Add settings options */}
-        </div>
-
-        <Divider className="my-6" />
       </Container>
     );
   } else {
