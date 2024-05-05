@@ -12,17 +12,19 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useLocation, Link } from "react-router-dom";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { getDocs, query, collection, where } from "firebase/firestore";
-import { db } from "../app/firebase";
+import { auth, db } from "../app/firebase";
 import { UserDetails } from "@/utils/interface";
 import Image from "next/image";
 import afterkelasLogo from "@/assets/afterkelas_logo.jpg";
 import homeSVG from "@/assets/dashboard.svg";
-import paperClip from "@/assets/paperclip_icon.png"
-import book from "@/assets/book.svg"
-import school from "@/assets/school.jpg"
-import manageUsers from "@/assets/manage_users.jpg"
-import attendanceIcon from "@/assets/attendance.jpg"
-import analyticsIcon from "@/assets/analytics.jpg"
+import paperClip from "@/assets/paperclip_icon.png";
+import book from "@/assets/book.svg";
+import school from "@/assets/school.jpg";
+import manageUsers from "@/assets/manage_users.jpg";
+import attendanceIcon from "@/assets/attendance.jpg";
+import analyticsIcon from "@/assets/analytics.jpg";
+import logout from "@/assets/logout.jpg";
+import { useRouter } from "next/navigation";
 
 interface LinkItem {
   text: string;
@@ -33,6 +35,7 @@ const HamburgerMenu: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const [user, setUser] = React.useState<User | null>(null);
   const [userType, setUserType] = React.useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const auth = getAuth();
@@ -97,13 +100,14 @@ const HamburgerMenu: React.FC = () => {
           { text: "Home", path: "/" },
           { text: "Classes", path: "/classes" },
           { text: "Assignments", path: "/assignments" },
+          { text: "Sign out", path: "/" },
         ],
       };
 
   const currentUserLinks = userType ? links[userType] ?? [] : [];
 
   const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={() => setOpen(false)}>
+    <Box sx={{ width: 400 }} role="presentation" onClick={() => setOpen(false)}>
       <Image
         src={afterkelasLogo}
         alt="Afterkelas logo"
@@ -113,41 +117,80 @@ const HamburgerMenu: React.FC = () => {
       />
       <List>
         {currentUserLinks.map((item, index) => (
-          <ListItem
-            key={index}
-            disablePadding
-            onClick={() => handleLinkClick(item.path)}
-          >
-            <ListItemButton component={Link} to={item.path}>
-              {item.text === "Home" ? (
-                <Image src={homeSVG} alt="Home" height={30} width={30}/>
-              ) : item.text === "Classes" || item.text === "My class"? (
-                <Image src={book} alt="Classes" height={30} width={30} />
-              ) : item.text === "Bookings" ? (
-                <Image src={school} alt="Bookings" height={30} width={30} />
-              ) : item.text === "Assignments" ? (
-                <Image src={paperClip} alt="Assignments" height={30} width={30} />
-              ) : item.text === "Manage Users" ? (
-                <Image src={manageUsers} alt="Manage Users" height={30} width={30}/>
-              ) : item.text === "Attendance" ? (
-                <Image src={attendanceIcon} alt="Attendance" height={30} width={30} />
-              ) : item.text === "Analytics" ? (
-                <Image src={analyticsIcon} alt="Analytics" height={30} width={30} />
-              ) : (
-                <div></div>
-              )}
-              <ListItemText primary={item.text} className="m-4" />
-            </ListItemButton>
-          </ListItem>
+          <>
+            <ListItem
+              key={index}
+              disablePadding
+              onClick={() => handleLinkClick(item.path)}
+            >
+              <ListItemButton component={Link} to={item.path}>
+                {item.text === "Home" ? (
+                  <Image src={homeSVG} alt="Home" height={30} width={30} />
+                ) : item.text === "Classes" || item.text === "My class" ? (
+                  <Image src={book} alt="Classes" height={30} width={30} />
+                ) : item.text === "Bookings" ? (
+                  <Image src={school} alt="Bookings" height={30} width={30} />
+                ) : item.text === "Assignments" ? (
+                  <Image
+                    src={paperClip}
+                    alt="Assignments"
+                    height={30}
+                    width={30}
+                  />
+                ) : item.text === "Manage Users" ? (
+                  <Image
+                    src={manageUsers}
+                    alt="Manage Users"
+                    height={30}
+                    width={30}
+                  />
+                ) : item.text === "Attendance" ? (
+                  <Image
+                    src={attendanceIcon}
+                    alt="Attendance"
+                    height={30}
+                    width={30}
+                  />
+                ) : item.text === "Analytics" ? (
+                  <Image
+                    src={analyticsIcon}
+                    alt="Analytics"
+                    height={30}
+                    width={30}
+                  />
+                ) : (
+                  <div></div>
+                )}
+                <ListItemText primary={item.text} className="m-4" />
+              </ListItemButton>
+              <Divider />
+            </ListItem>
+          </>
         ))}
       </List>
-      <Divider />
+      <Divider className="mb-20"/>
+      {userType == "student" || userType == "teacher" || userType == "admin" ? (
+        <ListItemButton onClick={() => handleSignOut()} className="">
+          <Image src={logout} alt="sign out" height={30} width={30} />
+          <ListItemText primary={"Sign out"} className="m-4" />
+        </ListItemButton>
+      ) : (
+        <Button variant="contained" onClick={() => router.push('/auth/sign-in')}>Sign In</Button>
+      )}
     </Box>
   );
 
   const handleLinkClick = (path: string) => {
     if (typeof window !== "undefined") {
       window.location.reload();
+    }
+  };
+  const handleSignOut = async () => {
+    try {
+      await auth.signOut();
+      console.log("User signed out successfully");
+    } catch (error) {
+      console.error("Error signing out:", error);
     }
   };
 

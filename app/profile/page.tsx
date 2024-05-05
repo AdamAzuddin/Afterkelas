@@ -12,7 +12,6 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
 const Profile = () => {
   const [user, loading, error] = useAuthState(auth);
