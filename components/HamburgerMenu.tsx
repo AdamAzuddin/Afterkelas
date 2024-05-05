@@ -12,8 +12,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useLocation, Link } from "react-router-dom";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { getDocs, query, collection, where } from "firebase/firestore";
-import { db } from "../app/firebase"; // Adjust the path as per your project structure
+import { db } from "../app/firebase";
 import { UserDetails } from "@/utils/interface";
+import Image from "next/image";
+import afterkelasLogo from "@/assets/afterkelas_logo.jpg";
 
 interface LinkItem {
   text: string;
@@ -96,6 +98,13 @@ const HamburgerMenu: React.FC = () => {
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={() => setOpen(false)}>
+      <Image
+        src={afterkelasLogo}
+        alt="Afterkelas logo"
+        width={100}
+        height={20}
+        className="m-3"
+      />
       <List>
         {currentUserLinks.map((item, index) => (
           <ListItem
