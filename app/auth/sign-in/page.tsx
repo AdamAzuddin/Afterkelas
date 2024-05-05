@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -16,6 +16,9 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
+import Image from "next/image";
+import afterkelasLogo from "@/assets/afterkelas_logo.jpg";
+import profileImg from "@/assets/profile_img.jpg";
 
 const SignIn = () => {
   const router = useRouter();
@@ -69,7 +72,24 @@ const SignIn = () => {
             alignItems: "center",
           }}
         >
-          <h1>Sign In</h1>
+          <h1 className="text-4xl mb-2">Sign In</h1>
+          <Image
+            src={afterkelasLogo}
+            alt="Afterkelas logo"
+            width={600}
+            height={15}
+          />
+          <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-black m-4">
+            <div className="absolute inset-0 rounded-full overflow-hidden">
+              <Image
+                src={profileImg}
+                alt="Profile Photo"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-full"
+              />
+            </div>
+          </div>
           <form onSubmit={handleSignIn} className="space-y-4">
             <TextField
               type="email"

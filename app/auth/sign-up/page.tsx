@@ -23,6 +23,9 @@ import Container from "@mui/material/Container";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
 import { generateRandomString } from "@/utils/generateNewUid";
+import Image from "next/image";
+import afterkelasLogo from "@/assets/afterkelas_logo.jpg";
+import profileImg from "@/assets/profile_img.jpg";
 
 const SignUp = () => {
   const router = useRouter();
@@ -79,10 +82,10 @@ const SignUp = () => {
           teacher: userId, // Reference to teacher document
           subject: subjectDocName,
           students: [],
-          assignments: [], 
+          assignments: [],
         };
         await addDoc(collection(db, "classrooms"), newClassroomData);
-        
+
         // Append the user's userId to the assignedTeachers array of the subject
         const subjectRef = doc(db, `subjects/${subjectDocName}`);
         await updateDoc(subjectRef, { assignedTeachers: arrayUnion(userId) });
@@ -102,13 +105,30 @@ const SignUp = () => {
     <Container maxWidth="sm">
       <Box
         sx={{
-          marginTop: 8,
+          marginTop: 2,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
         }}
       >
-        <h1 className="text-4xl">Sign Up</h1>
+        <h1 className="text-4xl mb-2">Sign Up</h1>
+        <Image
+          src={afterkelasLogo}
+          alt="Afterkelas logo"
+          width={600}
+          height={15}
+        />
+        <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-black m-4">
+          <div className="absolute inset-0 rounded-full overflow-hidden">
+            <Image
+              src={profileImg}
+              alt="Profile Photo"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-full"
+            />
+          </div>
+        </div>
         <form onSubmit={handleSignUp} className="space-y-4">
           <TextField
             label="Name"
@@ -169,9 +189,7 @@ const SignUp = () => {
                 <MenuItem value="chemistry">Chemistry</MenuItem>
                 <MenuItem value="biology">Biology</MenuItem>
                 <MenuItem value="math">Mathematics</MenuItem>
-                <MenuItem value="add-math">
-                  Additional Mathematics
-                </MenuItem>
+                <MenuItem value="add-math">Additional Mathematics</MenuItem>
                 <MenuItem value="accounting">Accounting</MenuItem>
                 <MenuItem value="econs">Economics</MenuItem>
               </Select>
