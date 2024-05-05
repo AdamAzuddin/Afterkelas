@@ -16,6 +16,13 @@ import { db } from "../app/firebase";
 import { UserDetails } from "@/utils/interface";
 import Image from "next/image";
 import afterkelasLogo from "@/assets/afterkelas_logo.jpg";
+import homeSVG from "@/assets/dashboard.svg";
+import paperClip from "@/assets/paperclip_icon.png"
+import book from "@/assets/book.svg"
+import school from "@/assets/school.jpg"
+import manageUsers from "@/assets/manage_users.jpg"
+import attendanceIcon from "@/assets/attendance.jpg"
+import analyticsIcon from "@/assets/analytics.jpg"
 
 interface LinkItem {
   text: string;
@@ -113,7 +120,24 @@ const HamburgerMenu: React.FC = () => {
             onClick={() => handleLinkClick(item.path)}
           >
             <ListItemButton component={Link} to={item.path}>
-              <ListItemText primary={item.text} />
+              {item.text === "Home" ? (
+                <Image src={homeSVG} alt="Home" height={30} width={30}/>
+              ) : item.text === "Classes" || item.text === "My class"? (
+                <Image src={book} alt="Classes" height={30} width={30} />
+              ) : item.text === "Bookings" ? (
+                <Image src={school} alt="Bookings" height={30} width={30} />
+              ) : item.text === "Assignments" ? (
+                <Image src={paperClip} alt="Assignments" height={30} width={30} />
+              ) : item.text === "Manage Users" ? (
+                <Image src={manageUsers} alt="Manage Users" height={30} width={30}/>
+              ) : item.text === "Attendance" ? (
+                <Image src={attendanceIcon} alt="Attendance" height={30} width={30} />
+              ) : item.text === "Analytics" ? (
+                <Image src={analyticsIcon} alt="Analytics" height={30} width={30} />
+              ) : (
+                <div></div>
+              )}
+              <ListItemText primary={item.text} className="m-4" />
             </ListItemButton>
           </ListItem>
         ))}

@@ -10,7 +10,7 @@ const Header = () => {
   const { isSidebarOpen } = useAppSelector((state) => state.record);
   return (
     <div
-      className={`flex flex-wrap justify-between items-center mt-2 py-5 `}
+      className={`flex flex-wrap justify-between items-center mt-2 py-5 px-5`}
     >
       <div
         className={`mb-2 flex justify-start items-center ${
