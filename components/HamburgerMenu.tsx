@@ -33,7 +33,6 @@ const HamburgerMenu: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const [user, setUser] = React.useState<User | null>(null);
   const [userType, setUserType] = React.useState<string | null>(null);
-  const location = useLocation();
 
   useEffect(() => {
     const auth = getAuth();
@@ -109,7 +108,7 @@ const HamburgerMenu: React.FC = () => {
         src={afterkelasLogo}
         alt="Afterkelas logo"
         width={100}
-        height={20}
+        height={40}
         className="m-3"
       />
       <List>

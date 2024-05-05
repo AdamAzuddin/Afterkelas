@@ -1,6 +1,6 @@
 "use client";
 
-import userSvg from "@/assets/userIcon.svg";
+import profileImg from "@/assets/profile_img.jpg";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -11,7 +11,7 @@ const NavProfile = () => {
         <Link href="/profile">
             <Image
               priority
-              src={userSvg}
+              src={profileImg}
               alt="profile-image"
               className="w-[25px] h-[25px] rounded-full"
             />
