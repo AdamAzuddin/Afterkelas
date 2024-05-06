@@ -1,0 +1,489 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* LOGIN PAGE */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.page0 {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #98bbd5;
+}
+
+.login-page {
+  width: 400px;
+  padding: 20px;
+  background-color: #bce8fb;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.input-box {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: calc(100% - 40px);
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+label {
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+.login-link {
+  display: inline-block;
+  width: calc(100% - 40px);
+  padding: 10px;
+  border: none;
+  border-radius: 78px;
+  background-color: #fff;
+  color: #000;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.4s ease;
+}
+
+.login-link:hover {
+  background-color: #18baff;
+  color: #fff;
+}
+.page0 .image {
+  position: absolute;
+  top: 17%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.page0 .image img {
+  width: 700px;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+/* LOGIN PAGE END */
+
+/* bg color */
+body {
+  min-height: 100%;
+}
+nav .logo {
+  display: flex;
+  align-items: center;
+  margin: 0 24px;
+}
+nav .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 311px;
+  padding: 20px 0;
+  background-color: #18baff;
+}
+.sidebar .sidebar-content {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px 16px;
+}
+.sidebar-content .list {
+  list-style: none;
+}
+.list .nav-link {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+  padding: 14px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.bottom-content .list {
+  margin-bottom: 70px;
+}
+/* hover effect */
+.lists .nav-link:hover {
+  background-color: #72c8ec;
+  transition: background-color 0.4s ease;
+}
+.content {
+  margin-right: 311px;
+  padding: 20px;
+  overflow-y: auto;
+}
+.nav-link .icon {
+  margin-right: 14px;
+  font-size: 35px;
+  color: #fff;
+}
+.nav-link .link {
+  font-size: 26px;
+  color: #fff;
+  font-weight: 400;
+}
+.lists .nav-link:hover .icon,
+.lists .nav-link:hover .link {
+  color: #fff;
+}
+.welcome-message h3 {
+  top: 10px;
+  margin-left: 300px;
+  padding: 40px;
+  color: #333;
+  font-size: 45px;
+}
+/* HOME (DASHBOARD) */
+.page1 .nav-link .bx-home-alt.icon {
+  color: #2a79cd;
+  margin-right: 14px;
+}
+/* blue bubble */
+.admin-profile {
+  background-color: #7bdbf9;
+  width: 1000px;
+  height: 300px;
+  right: 311px;
+  margin-left: 371px;
+  border-radius: 30px;
+  margin-top: 60px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+.admin-profile .text {
+  font-size: 40px;
+  margin-right: 10px;
+  padding: 10px;
+}
+
+.admin-profile .tree {
+  margin-bottom: 38px;
+  margin-left: auto;
+  max-width: 600px;
+  height: auto;
+}
+
+.admin-profile .user-logo {
+  margin-right: auto;
+  margin-left: 30px;
+  height: auto;
+}
+/* classes */
+.classes .header-class {
+  top: 10px;
+  margin-left: 300px;
+  padding: 40px;
+  font-size: 40px;
+}
+hr {
+  border-color: black;
+}
+.classes .class-info {
+  margin-top: 5px;
+  font-size: 26px;
+  color: #042e60;
+}
+
+/* MANAGE USERS */
+.page2 .welcome-message h3 {
+  margin-top: 10px;
+}
+.page2 .nav-link .bx-user-check.icon {
+  color: #2a79cd;
+  margin-right: 14px;
+}
+.page2 .add-button {
+  display: flex;
+}
+.page2 .interactive-bttn {
+  display: flex;
+  align-items: center;
+  margin-left: 395px;
+  margin-top: -30px;
+  background-color: #18baff;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.page2 .interactive-bttn:hover {
+  background-color: #72c8ec;
+  color: #fff;
+  transition: background-color 0.4s ease;
+}
+.page2 .users-table {
+  background-color: transparent;
+  opacity: 0.85;
+  width: 1065px;
+  height: auto;
+  margin-left: 341px;
+  border-radius: 30px;
+  overflow: hidden;
+  padding: 50px;
+  font-size: 20px;
+  margin-bottom: 50px;
+}
+.page2 table {
+  background-color: #fff;
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 30px;
+}
+.page2 th:first-child {
+  border-top-left-radius: 30px;
+}
+.page2 th:last-child {
+  border-top-right-radius: 30px;
+}
+.page2 th {
+  padding: 20px;
+  text-align: center;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+.page2 .name-column {
+  width: 70%;
+  background-color: #18baff;
+}
+.page2 .name {
+  text-align: left;
+}
+.page2 .role-column {
+  width: 20%;
+  background-color: #18baff;
+}
+.page2 .x-column {
+  width: 10%;
+  background-color: #18baff;
+}
+.page2 tr:not(:last-child) td {
+  border-bottom: 1px solid #000;
+}
+.page2 td {
+  padding: 20px;
+  text-align: center;
+}
+.page2 .bx-x-circle {
+  color: #ff0000;
+  font-size: 30px;
+}
+
+/* ATTENDANCE */
+.page3 .welcome-message h3 {
+  margin-top: 10px;
+}
+.page3 .nav-link .bxs-user-account.icon {
+  color: #2a79cd;
+  margin-right: 14px;
+}
+.container {
+  background-color: #fff;
+  opacity: 0.85;
+  width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  margin-left: 410px;
+  font-size: 20px;
+  border-radius: 30px;
+  z-index: 1;
+  position: relative;
+}
+.top-section {
+  margin-bottom: 20px;
+}
+.bottom-section {
+  display: flex;
+  align-items: center;
+}
+.inputs {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.inputs > * {
+  margin-right: 10px;
+}
+.name-input label {
+  margin-right: 10px;
+}
+
+.submit-bttn {
+  margin-left: 60px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #18baff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.4s ease;
+}
+.submit-bttn:hover {
+  background-color: #72c8ec;
+}
+.page3 .attendance-table {
+  background-color: transparent;
+  opacity: 0.85;
+  width: 1065px;
+  height: auto;
+  margin-left: 331px;
+  border-radius: 30px;
+  overflow: hidden;
+  padding: 50px;
+  font-size: 20px;
+  margin-bottom: 50px;
+}
+.page3 table {
+  background-color: #fff;
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 30px;
+}
+.page3 th:first-child {
+  border-top-left-radius: 30px;
+}
+.page3 th:last-child {
+  border-top-right-radius: 30px;
+}
+.page3 th {
+  padding: 20px;
+  text-align: center;
+  background-color: #18baff;
+  border-bottom: 1px solid #ddd;
+}
+.page3 .name-column {
+  width: 40%;
+}
+.page3 .role-column,
+.page3 .subject-column,
+.page3 .att-column {
+  width: 20%;
+}
+.page3 tr:not(:last-child) td {
+  border-bottom: 1px solid #000;
+}
+.page3 td {
+  padding: 20px;
+  text-align: center;
+}
+
+/* ANALYTICS */
+.page4 .welcome-message h3 {
+  margin-top: 10px;
+}
+.page4 .nav-link .bx-bar-chart-alt-2.icon {
+  color: #2a79cd;
+  margin-right: 14px;
+}
+.page4 .analytics-table {
+  background-color: transparent;
+  opacity: 0.85;
+  width: 1065px;
+  height: auto;
+  margin-left: 341px;
+  border-radius: 30px;
+  overflow: hidden;
+  padding: 15px;
+  font-size: 20px;
+  margin-bottom: 50px;
+}
+.page4 table {
+  background-color: #fff;
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 30px;
+}
+
+.analytics-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  height: 100%; /* Set full viewport height */
+  padding-top: 20px;
+}
+
+.analytics-table {
+  width: 80%; /* Adjust the width of the table container */
+  margin-top: 20px; /* Add some top margin */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+h1 {
+  text-align: center;
+}
+
+th:first-child {
+  border-top-left-radius: 30px;
+}
+th:last-child {
+  border-top-right-radius: 30px;
+}
+th {
+  padding: 20px;
+  text-align: center;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+.subject {
+  width: 50%;
+  background-color: #18baff;
+}
+.teachers,
+.students {
+  width: 25%;
+  background-color: #18baff;
+}
+tr:not(:last-child) td {
+  border-bottom: 1px solid #000;
+}
+td {
+  padding: 20px;
+  text-align: center;
+}
+
+.delete-btn {
+  background-color: red;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
