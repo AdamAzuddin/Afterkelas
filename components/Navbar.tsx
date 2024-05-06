@@ -12,7 +12,7 @@ const Navbar = () => {
   const { isSidebarOpen } = useAppSelector((state) => state.record);
   return (
     <Router>
-      <div className="w-full h-[55px] relative bg-[#0051DF]">
+      <div className="w-full h-[55px] relative bg-[#18baff]">
         <div
           className={`main-container flex flex-row ${
             !isSidebarOpen ? "justify-start" : "justify-between"
